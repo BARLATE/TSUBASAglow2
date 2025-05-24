@@ -77,63 +77,63 @@
 </div>
 
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyCaj8C14EeYBYxZWUmDqwcdGJYf6GOQ0QU",
-    authDomain: "barlate.firebaseapp.com",
-    projectId: "barlate",
-    storageBucket: "barlate.appspot.com",
-    messagingSenderId: "773411539842",
-    appId: "1:773411539842:web:3a436c6db73faa43b4dd9b",
-    databaseURL: "https://barlate-default-rtdb.firebaseio.com/"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+  document.addEventListener("DOMContentLoaded", () => {
+    const firebaseConfig = {
+      apiKey: "AIzaSyCaj8C14EeYBYxZWUmDqwcdGJYf6GOQ0QU",
+      authDomain: "barlate.firebaseapp.com",
+      projectId: "barlate",
+      storageBucket: "barlate.appspot.com",
+      messagingSenderId: "773411539842",
+      appId: "1:773411539842:web:3a436c6db73faa43b4dd9b",
+      databaseURL: "https://barlate-default-rtdb.firebaseio.com/"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-  let level = 1;
-  let exp = 0;
-  const maxExp = 20;
+    let level = 1;
+    let exp = 0;
+    const maxExp = 20;
 
-  const levelInfo = document.getElementById("levelInfo");
-  const image = document.getElementById("charImage");
-  const message = document.getElementById("message");
-  const status = document.getElementById("status");
-  const tapAudio = document.getElementById("tapSound");
-  const levelUpAudio = document.getElementById("levelUpSound");
+    const levelInfo = document.getElementById("levelInfo");
+    const image = document.getElementById("charImage");
+    const message = document.getElementById("message");
+    const status = document.getElementById("status");
+    const tapAudio = document.getElementById("tapSound");
+    const levelUpAudio = document.getElementById("levelUpSound");
 
-  const images = ["momoa_lv1.png", "momoa_lv2.png", "momoa_lv3.png"];
-  const messages = [
-    "お酒好き！！💛",
-    "飲みたい歌いたい！！🍻",
-    "まだまだ頑張るよーー🔥"
-  ];
+    const images = ["momoa_lv1.png", "momoa_lv2.png", "momoa_lv3.png"];
+    const messages = [
+      "お酒好き！！💛",
+      "飲みたい歌いたい！！🍻",
+      "まだまだ頑張るよーー🔥"
+    ];
 
-  function updateUI() {
-    image.src = images[level - 1];
-    message.textContent = "「" + messages[level - 1] + "」";
-    levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
-    status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
-  }
-
-  function giveDrink() {
-    tapAudio.currentTime = 0;
-    tapAudio.play();
-
-    exp++;
-    if (exp >= maxExp) {
-      exp = 0;
-      if (level < 3) {
-        level++;
-        image.classList.add("level-up");
-        setTimeout(() => image.classList.remove("level-up"), 600);
-        levelUpAudio.currentTime = 0;
-        levelUpAudio.play();
-      }
+    function updateUI() {
+      image.src = images[level - 1];
+      message.textContent = "「" + messages[level - 1] + "」";
+      levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
+      status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
     }
-    updateUI();
-    db.ref("momoa").set({ level, exp });
-  }
 
-  function loadFromFirebase() {
+    window.giveDrink = function () {
+      tapAudio.currentTime = 0;
+      tapAudio.play();
+
+      exp++;
+      if (exp >= maxExp) {
+        exp = 0;
+        if (level < 3) {
+          level++;
+          image.classList.add("level-up");
+          setTimeout(() => image.classList.remove("level-up"), 600);
+          levelUpAudio.currentTime = 0;
+          levelUpAudio.play();
+        }
+      }
+      updateUI();
+      db.ref("momoa").set({ level, exp });
+    };
+
     db.ref("momoa").once("value").then((snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val();
@@ -142,9 +142,7 @@
         updateUI();
       }
     });
-  }
-
-  window.onload = loadFromFirebase;
+  });
 </script>
 </body>
 </html>
