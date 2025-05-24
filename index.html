@@ -5,8 +5,11 @@
   <title>TSUBASA育成RPG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Rounded+M+PLUS+1c&display=swap" rel="stylesheet">
+
+  <!-- Firebase v8スタイルの読み込み -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"></script>
+
   <style>
     body {
       margin: 0;
@@ -77,15 +80,17 @@
 </div>
 
 <script>
+  // Firebase設定（あなたの laterpg-1915f 用）
   const firebaseConfig = {
-    apiKey: "AIzaSyCaj8C14EeYBYxZWUmDqwcdGJYf6GOQ0QU",
-    authDomain: "barlate.firebaseapp.com",
-    projectId: "barlate",
-    storageBucket: "barlate.appspot.com",
-    messagingSenderId: "773411539842",
-    appId: "1:773411539842:web:3a436c6db73faa43b4dd9b",
-    databaseURL: "https://barlate-default-rtdb.firebaseio.com/"
+    apiKey: "AIzaSyC6Ntg5oT6PFTRDlZTzaQpxNL0zrYnNZ2s",
+    authDomain: "laterpg-1915f.firebaseapp.com",
+    databaseURL: "https://laterpg-1915f-default-rtdb.firebaseio.com",
+    projectId: "laterpg-1915f",
+    storageBucket: "laterpg-1915f.appspot.com",
+    messagingSenderId: "244161876495",
+    appId: "1:244161876495:web:6272451b6c88e54238897a"
   };
+
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
@@ -115,7 +120,6 @@
   }
 
   function giveDrink() {
-   alert("ボタンが押されました！");
     tapAudio.currentTime = 0;
     tapAudio.play();
 
