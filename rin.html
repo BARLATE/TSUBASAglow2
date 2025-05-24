@@ -119,7 +119,7 @@
     </div>
   </div>
 
-<audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
+ id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
 
   <script>
     let level = 1;
@@ -130,7 +130,8 @@
     const image = document.getElementById("rinImage");
     const message = document.getElementById("message");
     const status = document.getElementById("status");
-
+    const audio = document.getElementById("levelUpSound");
+    
     const images = ["rin_lv1.png", "rin_lv2.png", "rin_lv3.png"];
     const messages = [
       "さあ、飲ませなさい⚛️",
@@ -154,6 +155,7 @@
       audio.play();
           }
       }
+      
       image.src = images[level - 1];
       message.textContent = "「" + messages[level - 1] + "」";
       levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
