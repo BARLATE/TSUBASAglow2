@@ -141,6 +141,10 @@
     ];
 
     function giveDrink() {
+    
+     tapAudio.currentTime = 0;
+  tapAudio.play();
+    
       exp++;
       if (exp >= maxExp) {
         exp = 0;
@@ -148,8 +152,8 @@
           level++;
           image.classList.add("level-up");
           setTimeout(() => image.classList.remove("level-up"), 600);
-          audio.currentTime = 0;
-          audio.play();
+          levelUpaudio.currentTime = 0;
+          levelUpaudio.play();
         }
       }
       image.src = images[level - 1];
