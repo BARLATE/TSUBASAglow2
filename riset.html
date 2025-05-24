@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>TSUBASAデータ初期化</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"></script>
+</head>
+<body>
+  <h2>TSUBASAのデータ初期化</h2>
+  <button onclick="resetData()">初期化実行</button>
+
+  <script>
+    // あなたのFirebase設定をここに貼り付け
+    const firebaseConfig = {
+      apiKey: "AIzaSyCaj8C14EeYBYxZWUmDqwcdGJYf6GOQ0QU",
+      authDomain: "barlate.firebaseapp.com",
+      projectId: "barlate",
+      storageBucket: "barlate.appspot.com",
+      messagingSenderId: "773411539842",
+      appId: "1:773411539842:web:3a436c6db73faa43b4dd9b",
+      databaseURL: "https://barlate-default-rtdb.firebaseio.com/"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function resetData() {
+      db.ref("tsubasa").set({
+        level: 1,
+        exp: 0
+      })
+      .then(() => {
+        alert("初期化成功！（レベル1・経験値0）");
+      })
+      .catch((error) => {
+        alert("初期化エラー: " + error.message);
+      });
+    }
+  </script>
+</body>
+</html>
