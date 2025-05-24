@@ -5,8 +5,6 @@
   <title>MOMOA育成RPG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Rounded+M+PLUS+1c&display=swap" rel="stylesheet">
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"></script>
   <style>
     body {
       margin: 0;
@@ -25,11 +23,11 @@
     button {
       margin-top: 15px; padding: 16px 24px; font-size: 20px;
       font-weight: bold; background-color: #fff;
-      color: #FFD700; border: none; border-radius: 30px;
+      color: #fbc02d; border: none; border-radius: 30px;
       width: 90%; max-width: 360px;
     }
     .bottom-section {
-      background-color: #fff; color: #FFD700; padding: 30px 10px;
+      background-color: #fff; color: #fbc02d; padding: 30px 10px;
       width: 100%; text-align: center;
     }
     .menu-links {
@@ -59,7 +57,7 @@
 
 <div class="top-section">
   <div class="title">MOMOAの育成中！</div>
-  <img src="momoa_lv1.png" alt="MOMOA" class="character-img" id="charImage">
+  <img src="momoa_lv1.png" alt="MOMOA" class="character-img" id="momoaImage">
   <div class="message" id="message">「お酒好き！！💛」</div>
   <div class="level-info" id="levelInfo">レベル: 1（経験値: 0/20）</div>
   <div class="status" id="status">攻撃力: 500 / 防御力: 500</div>
@@ -77,72 +75,43 @@
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const firebaseConfig = {
-      apiKey: "AIzaSyCaj8C14EeYBYxZWUmDqwcdGJYf6GOQ0QU",
-      authDomain: "barlate.firebaseapp.com",
-      projectId: "barlate",
-      storageBucket: "barlate.appspot.com",
-      messagingSenderId: "773411539842",
-      appId: "1:773411539842:web:3a436c6db73faa43b4dd9b",
-      databaseURL: "https://barlate-default-rtdb.firebaseio.com/"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+let level = 1;
+let exp = 0;
+const maxExp = 20;
+const levelInfo = document.getElementById("levelInfo");
+const image = document.getElementById("momoaImage");
+const message = document.getElementById("message");
+const status = document.getElementById("status");
+const tapAudio = document.getElementById("tapSound");
+const levelUpAudio = document.getElementById("levelUpSound");
 
-    let level = 1;
-    let exp = 0;
-    const maxExp = 20;
+const images = ["momoa_lv1.png", "momoa_lv2.png", "momoa_lv3.png"];
+const messages = [
+  "お酒好き！！💛",
+  "飲みたい歌いたい！！🍻",
+  "まだまだ頑張るよーー🔥"
+];
 
-    const levelInfo = document.getElementById("levelInfo");
-    const image = document.getElementById("charImage");
-    const message = document.getElementById("message");
-    const status = document.getElementById("status");
-    const tapAudio = document.getElementById("tapSound");
-    const levelUpAudio = document.getElementById("levelUpSound");
+function giveDrink() {
+  tapAudio.currentTime = 0;
+  tapAudio.play();
 
-    const images = ["momoa_lv1.png", "momoa_lv2.png", "momoa_lv3.png"];
-    const messages = [
-      "お酒好き！！💛",
-      "飲みたい歌いたい！！🍻",
-      "まだまだ頑張るよーー🔥"
-    ];
-
-    function updateUI() {
-      image.src = images[level - 1];
-      message.textContent = "「" + messages[level - 1] + "」";
-      levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
-      status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
+  exp++;
+  if (exp >= maxExp) {
+    exp = 0;
+    if (level < 3) {
+      level++;
+      image.classList.add("level-up");
+      setTimeout(() => image.classList.remove("level-up"), 600);
+      levelUpAudio.currentTime = 0;
+      levelUpAudio.play();
     }
-
-    window.giveDrink = function () {
-      tapAudio.currentTime = 0;
-      tapAudio.play();
-
-      exp++;
-      if (exp >= maxExp) {
-        exp = 0;
-        if (level < 3) {
-          level++;
-          image.classList.add("level-up");
-          setTimeout(() => image.classList.remove("level-up"), 600);
-          levelUpAudio.currentTime = 0;
-          levelUpAudio.play();
-        }
-      }
-      updateUI();
-      db.ref("momoa").set({ level, exp });
-    };
-
-    db.ref("momoa").once("value").then((snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        level = data.level || 1;
-        exp = data.exp || 0;
-        updateUI();
-      }
-    });
-  });
+  }
+  image.src = images[level - 1];
+  message.textContent = "「" + messages[level - 1] + "」";
+  levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
+  status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
+}
 </script>
 </body>
 </html>
