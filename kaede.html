@@ -36,8 +36,8 @@
       display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;
     }
     .menu-links a {
-      display: inline-block; padding: 16px; background-color: #ffe;
-      border-radius: 12px; text-decoration: none; color: #FF1493;
+      display: inline-block; padding: 16px; background-color: #ffc1e3;
+      border-radius: 12px; text-decoration: none; color: #c71585;
       font-weight: bold; font-size: 18px; width: 40vw;
       min-width: 120px; text-align: center;
     }
@@ -110,8 +110,8 @@
   function updateUI() {
     image.src = images[level - 1];
     message.textContent = "「" + messages[level - 1] + "」";
-    levelInfo.textContent = `レベル: ${{level}（経験値: ${{exp}/${{maxExp}）`;
-    status.textContent = `攻撃力: ${{level * 500} / 防御力: ${{level * 500}`;
+    levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
+    status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
   }
 
   function giveDrink() {
