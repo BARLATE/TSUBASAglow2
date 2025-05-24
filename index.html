@@ -93,6 +93,7 @@
   </style>
 </head>
 <body>
+<audio id="tapSound" src="tap.mp3" preload="auto"></audio>
   <audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
 
   <div class="top-section">
@@ -123,6 +124,7 @@
     const image = document.getElementById("tsubasaImage");
     const message = document.getElementById("message");
     const status = document.getElementById("status");
+    const tapAudio = document.getElementById("tapSound");
     const audio = document.getElementById("levelUpSound");
 
     const images = ["tsubasa_lv1.png", "tsubasa_lv2.png", "tsubasa_lv3.png"];

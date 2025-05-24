@@ -99,6 +99,7 @@
   </style>
 </head>
 <body>
+<audio id="tapSound" src="tap.mp3" preload="auto"></audio>
 <audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
 
   <div class="top-section">
@@ -129,6 +130,7 @@
     const image = document.getElementById("kaedeImage");
     const message = document.getElementById("message");
     const status = document.getElementById("status");
+    const tapAudio = document.getElementById("tapSound");
     const audio = document.getElementById("levelUpSound");
 
     const images = ["kaede_lv1.png", "kaede_lv2.png", "kaede_lv3.png"];
