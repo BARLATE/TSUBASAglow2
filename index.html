@@ -64,8 +64,8 @@
 </div>
 
 <script>
-  let level = 1;
-  let exp = 0;
+  let level = parseInt(localStorage.getItem("tsubasa_level")) || 1;
+  let exp = parseInt(localStorage.getItem("tsubasa_exp")) || 0;
   const maxExp = 20;
 
   const levelInfo = document.getElementById("levelInfo");
@@ -82,6 +82,13 @@
     "潰れると思うやん？潰れんっちゃんね〜！"
   ];
 
+  function updateDisplay() {
+    image.src = images[level - 1];
+    message.textContent = "「" + messages[level - 1] + "」";
+    levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
+    status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
+  }
+
   function giveDrink() {
     tapAudio.currentTime = 0;
     tapAudio.play();
@@ -91,17 +98,18 @@
       exp = 0;
       if (level < 3) {
         level++;
-        image.classList.add("level-up");
-        setTimeout(() => image.classList.remove("level-up"), 600);
         levelUpAudio.currentTime = 0;
         levelUpAudio.play();
       }
     }
-    image.src = images[level - 1];
-    message.textContent = "「" + messages[level - 1] + "」";
-    levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
-    status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
+
+    localStorage.setItem("tsubasa_level", level);
+    localStorage.setItem("tsubasa_exp", exp);
+    updateDisplay();
   }
+
+  // 初期表示
+  window.onload = updateDisplay;
 </script>
 </body>
 </html>
