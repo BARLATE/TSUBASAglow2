@@ -5,141 +5,103 @@
   <title>TSUBASA育成RPG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Rounded+M+PLUS+1c&display=swap" rel="stylesheet">
-  
-  <!-- Firebase SDK（読み込み順が重要） -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"></script>
-
   <style>
-    body { margin: 0; background: #FF0000; color: #fff; font-family: 'Rounded M PLUS 1c', sans-serif; }
-    .top-section { padding: 20px 10px; text-align: center; }
-    .title { font-size: 32px; font-weight: bold; margin-bottom: 10px; }
-    .character-img { width: 80vw; max-width: 300px; border-radius: 20px; box-shadow: 0 0 12px #fff; }
-    .message { margin-top: 10px; font-size: 20px; }
-    .level-info, .status { margin-top: 8px; font-size: 18px; }
-    button {
-      margin-top: 15px; padding: 16px 24px; font-size: 20px;
-      font-weight: bold; background-color: #fff;
-      color: #FF0000; border: none; border-radius: 30px;
-      width: 90%; max-width: 360px;
+    body {
+      margin: 0;
+      background: #FF0000;
+      color: #fff;
+      font-family: 'Rounded M PLUS 1c', sans-serif;
     }
-    .bottom-section {
-      background-color: #fff; color: #FF0000; padding: 30px 10px;
+    .top-section {
+      padding: 20px 10px;
       text-align: center;
     }
-    .menu-links {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;
+    .title {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 10px;
     }
-    .menu-links a {
-      padding: 16px; background-color: #ffe; border-radius: 12px;
-      text-decoration: none; color: #FF0000; font-weight: bold;
-      font-size: 18px; width: 40vw; min-width: 120px; text-align: center;
+    .character-img {
+      width: 80vw;
+      max-width: 300px;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 0 12px #fff;
     }
-    @keyframes levelUpBounce {
-      0% { transform: scale(1); }
-      30% { transform: scale(1.3); }
-      60% { transform: scale(0.9); }
-      100% { transform: scale(1); }
+    .message {
+      margin-top: 10px;
+      font-size: 20px;
     }
-    .level-up {
-      animation: levelUpBounce 0.6s ease;
-      box-shadow: 0 0 20px #fff, 0 0 40px #fff;
+    .level-info, .status {
+      margin-top: 8px;
+      font-size: 18px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 16px 24px;
+      font-size: 20px;
+      font-weight: bold;
+      background-color: #fff;
+      color: #FF0000;
+      border: none;
+      border-radius: 30px;
+      width: 90%;
+      max-width: 360px;
     }
   </style>
 </head>
 <body>
-  <audio id="tapSound" src="tap.mp3" preload="auto"></audio>
-  <audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
+<audio id="tapSound" src="tap.mp3" preload="auto"></audio>
+<audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
 
-  <div class="top-section">
-    <div class="title">TSUBASAの育成中！</div>
-    <img src="tsubasa_lv1.png" alt="TSUBASA" class="character-img" id="charImage">
-    <div class="message" id="message">「お酒強くなりたい、、！」</div>
-    <div class="level-info" id="levelInfo">レベル: 1（経験値: 0/20）</div>
-    <div class="status" id="status">攻撃力: 500 / 防御力: 500</div>
-    <button id="giveDrinkButton">お酒をあげる</button>
-  </div>
+<div class="top-section">
+  <div class="title">TSUBASAの育成中！</div>
+  <img src="tsubasa_lv1.png" alt="TSUBASA" class="character-img" id="tsubasaImage">
+  <div class="message" id="message">「お酒強くなりたい、、！」</div>
+  <div class="level-info" id="levelInfo">レベル: 1（経験値: 0/20）</div>
+  <div class="status" id="status">攻撃力: 500 / 防御力: 500</div>
+  <button onclick="giveDrink()">お酒をあげる</button>
+</div>
 
-  <div class="bottom-section">
-    <h2>他の推しキャラを育成する！</h2>
-    <div class="menu-links">
-      <a href="index.html">TSUBASA</a>
-      <a href="momoa.html">MOMOA</a>
-      <a href="kaede.html">KAEDE</a>
-      <a href="rin.html">RIN</a>
-    </div>
-  </div>
+<script>
+  let level = 1;
+  let exp = 0;
+  const maxExp = 20;
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const firebaseConfig = {
-        apiKey: "AIzaSyCaj8C14EeYBYxZWUmDqwcdGJYf6GOQ0QU",
-        authDomain: "barlate.firebaseapp.com",
-        projectId: "barlate",
-        storageBucket: "barlate.appspot.com",
-        messagingSenderId: "773411539842",
-        appId: "1:773411539842:web:3a436c6db73faa43b4dd9b",
-        databaseURL: "https://barlate-default-rtdb.firebaseio.com/"
-      };
+  const levelInfo = document.getElementById("levelInfo");
+  const image = document.getElementById("tsubasaImage");
+  const message = document.getElementById("message");
+  const status = document.getElementById("status");
+  const tapAudio = document.getElementById("tapSound");
+  const levelUpAudio = document.getElementById("levelUpSound");
 
-      firebase.initializeApp(firebaseConfig);
-      const db = firebase.database();
+  const images = ["tsubasa_lv1.png", "tsubasa_lv2.png", "tsubasa_lv3.png"];
+  const messages = [
+    "お酒強くなりたい、、！",
+    "飲みべも歌べも高いぞ🍻！",
+    "潰れると思うやん？潰れんっちゃんね〜！"
+  ];
 
-      let level = 1;
-      let exp = 0;
-      const maxExp = 20;
+  function giveDrink() {
+    tapAudio.currentTime = 0;
+    tapAudio.play();
 
-      const levelInfo = document.getElementById("levelInfo");
-      const image = document.getElementById("charImage");
-      const message = document.getElementById("message");
-      const status = document.getElementById("status");
-      const tapAudio = document.getElementById("tapSound");
-      const levelUpAudio = document.getElementById("levelUpSound");
-
-      const images = ["tsubasa_lv1.png", "tsubasa_lv2.png", "tsubasa_lv3.png"];
-      const messages = [
-        "お酒強くなりたい、、！",
-        "飲みべも歌べも高いぞ🍻！",
-        "潰れると思うやん？潰れんっちゃんね〜！"
-      ];
-
-      function updateUI() {
-        image.src = images[level - 1];
-        message.textContent = "「" + messages[level - 1] + "」";
-        levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
-        status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
+    exp++;
+    if (exp >= maxExp) {
+      exp = 0;
+      if (level < 3) {
+        level++;
+        image.classList.add("level-up");
+        setTimeout(() => image.classList.remove("level-up"), 600);
+        levelUpAudio.currentTime = 0;
+        levelUpAudio.play();
       }
-
-      function giveDrink() {
-        tapAudio.currentTime = 0;
-        tapAudio.play();
-
-        exp++;
-        if (exp >= maxExp) {
-          exp = 0;
-          if (level < 3) {
-            level++;
-            image.classList.add("level-up");
-            setTimeout(() => image.classList.remove("level-up"), 600);
-            levelUpAudio.currentTime = 0;
-            levelUpAudio.play();
-          }
-        }
-        updateUI();
-        db.ref("tsubasa").set({ level, exp });
-      }
-
-      db.ref("tsubasa").once("value").then((snapshot) => {
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          level = data.level || 1;
-          exp = data.exp || 0;
-          updateUI();
-        }
-      });
-
-      document.getElementById("giveDrinkButton").addEventListener("click", giveDrink);
-    });
-  </script>
+    }
+    image.src = images[level - 1];
+    message.textContent = "「" + messages[level - 1] + "」";
+    levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
+    status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
+  }
+</script>
 </body>
 </html>
