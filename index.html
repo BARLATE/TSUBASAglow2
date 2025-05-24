@@ -4,85 +4,131 @@
 <head>
   <meta charset="UTF-8">
   <title>TSUBASA育成RPG</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Rounded+M+PLUS+1c&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(#ffecec, #fff);
+      margin: 0;
+      background-color: #ff0000;
+      color: #fff;
+      font-family: 'Rounded M PLUS 1c', sans-serif;
+    }
+    .top-section {
+      padding: 20px 10px;
       text-align: center;
-      padding: 30px;
     }
     .title {
-      font-size: 24px;
+      font-size: 32px;
       font-weight: bold;
-      color: #d6336c;
       margin-bottom: 10px;
     }
-    .level {
-      font-size: 18px;
-      margin: 20px 0;
+    .character-img {
+      width: 80vw;
+      max-width: 300px;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 0 12px #fff;
     }
-    .serif {
-      font-size: 16px;
-      margin: 10px 0;
-      color: #444;
+    .message {
+      margin-top: 10px;
+      font-size: 20px;
+    }
+    .level-info, .status {
+      margin-top: 8px;
+      font-size: 18px;
     }
     button {
-      padding: 12px 24px;
-      font-size: 16px;
-      background-color: #ff5e99;
-      color: white;
+      margin-top: 15px;
+      padding: 16px 24px;
+      font-size: 20px;
+      font-weight: bold;
+      background-color: #ffffff;
+      color: #ff0000;
       border: none;
-      border-radius: 8px;
-      cursor: pointer;
+      border-radius: 30px;
+      width: 90%;
+      max-width: 360px;
     }
-    #tsubasaImage {
-      width: 220px;
-      border-radius: 20px;
-      margin: 20px auto;
-      box-shadow: 0 0 12px rgba(0,0,0,0.2);
+
+    .bottom-section {
+      background-color: #fff;
+      color: #ff0000;
+      padding: 30px 10px;
+      width: 100%;
+      text-align: center;
+    }
+    .bottom-section h2 {
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+    .menu-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+    }
+    .menu-links a {
+      display: inline-block;
+      padding: 16px;
+      background-color: #ffcccc;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #d00000;
+      font-weight: bold;
+      font-size: 18px;
+      width: 40vw;
+      min-width: 120px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <div class="title" id="username">TSUBASAの育成中！</div>
-  <img src="tsubasa_lv1.png" alt="TSUBASA" id="tsubasaImage">
-  <div class="level" id="levelInfo">レベル: 1（経験値: 0/5）</div>
-  <div class="serif" id="serif">「がんばって育ててね！」</div>
-  <button onclick="giveDrink()">お酒をあげる</button>
+  <div class="top-section">
+    <div class="title">TSUBASAの育成中！</div>
+    <img src="tsubasa_lv1.png" alt="TSUBASA" class="character-img" id="tsubasaImage">
+    <div class="message" id="message">「がんばって育ててね！」</div>
+    <div class="level-info" id="levelInfo">レベル: 1（経験値: 0/20）</div>
+    <div class="status" id="status">攻撃力: 500 / 防御力: 500</div>
+    <button onclick="giveDrink()">お酒をあげる</button>
+  </div>
+
+  <div class="bottom-section">
+    <h2>他の推しキャラを育成する！</h2>
+    <div class="menu-links">
+      <a href="kaede.html">KAEDE</a>
+      <a href="momoa.html">MOMOA</a>
+      <a href="tsubasa.html">TSUBASA</a>
+    </div>
+  </div>
 
   <script>
-    let exp = 0;
     let level = 1;
+    let exp = 0;
+    const maxExp = 20;
 
-    const images = {
-      1: "tsubasa_lv1.png",
-      2: "tsubasa_lv2.png",
-      3: "tsubasa_lv3.png"
-    };
+    const levelInfo = document.getElementById("levelInfo");
+    const image = document.getElementById("tsubasaImage");
+    const message = document.getElementById("message");
+    const status = document.getElementById("status");
 
-    const serifs = {
-      1: "「がんばって育ててね！」",
-      2: "「ちょっと大人になった気がする！」",
-      3: "「最強に輝いてるって感じ！」"
-    };
-
-    function updateDisplay() {
-      document.getElementById("tsubasaImage").src = images[level] || images[3];
-      document.getElementById("serif").innerText = serifs[level] || "";
-      document.getElementById("levelInfo").innerText = `レベル: ${level}（経験値: ${exp}/15）`;
-    }
+    const images = ["tsubasa_lv1.png", "tsubasa_lv2.png", "tsubasa_lv3.png"];
+    const messages = [
+      "がんばって育ててね！",
+      "ちょっと大人になった気がする！",
+      "立派に育ちました！"
+    ];
 
     function giveDrink() {
       exp++;
-      if (exp >= 15) {
-        if (level < 3) level++;
+      if (exp >= maxExp) {
         exp = 0;
-        alert("TSUBASAがレベルアップしたよ！");
+        if (level < 3) level++;
       }
-      updateDisplay();
+      image.src = images[level - 1];
+      message.textContent = "「" + messages[level - 1] + "」";
+      levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
+      status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
     }
-
-    window.onload = updateDisplay;
   </script>
 </body>
 </html>
