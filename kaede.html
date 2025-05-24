@@ -5,6 +5,8 @@
   <title>KAEDE育成RPG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Rounded+M+PLUS+1c&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"></script>
   <style>
     body {
       margin: 0;
@@ -23,19 +25,19 @@
     button {
       margin-top: 15px; padding: 16px 24px; font-size: 20px;
       font-weight: bold; background-color: #fff;
-      color: #ff1493; border: none; border-radius: 30px;
+      color: #FF1493; border: none; border-radius: 30px;
       width: 90%; max-width: 360px;
     }
     .bottom-section {
-      background-color: #fff; color: #ff1493; padding: 30px 10px;
+      background-color: #fff; color: #FF1493; padding: 30px 10px;
       width: 100%; text-align: center;
     }
     .menu-links {
       display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;
     }
     .menu-links a {
-      display: inline-block; padding: 16px; background-color: #ffc1e3;
-      border-radius: 12px; text-decoration: none; color: #c71585;
+      display: inline-block; padding: 16px; background-color: #ffe;
+      border-radius: 12px; text-decoration: none; color: #FF1493;
       font-weight: bold; font-size: 18px; width: 40vw;
       min-width: 120px; text-align: center;
     }
@@ -57,7 +59,7 @@
 
 <div class="top-section">
   <div class="title">KAEDEの育成中！</div>
-  <img src="kaede_lv1.png" alt="KAEDE" class="character-img" id="kaedeImage">
+  <img src="kaede_lv1.png" alt="KAEDE" class="character-img" id="charImage">
   <div class="message" id="message">「ちゃんちゃんぱりー」</div>
   <div class="level-info" id="levelInfo">レベル: 1（経験値: 0/20）</div>
   <div class="status" id="status">攻撃力: 500 / 防御力: 500</div>
@@ -75,43 +77,74 @@
 </div>
 
 <script>
-let level = 1;
-let exp = 0;
-const maxExp = 20;
-const levelInfo = document.getElementById("levelInfo");
-const image = document.getElementById("kaedeImage");
-const message = document.getElementById("message");
-const status = document.getElementById("status");
-const tapAudio = document.getElementById("tapSound");
-const levelUpAudio = document.getElementById("levelUpSound");
+  const firebaseConfig = {
+    apiKey: "AIzaSyCaj8C14EeYBYxZWUmDqwcdGJYf6GOQ0QU",
+    authDomain: "barlate.firebaseapp.com",
+    projectId: "barlate",
+    storageBucket: "barlate.appspot.com",
+    messagingSenderId: "773411539842",
+    appId: "1:773411539842:web:3a436c6db73faa43b4dd9b",
+    databaseURL: "https://barlate.firebaseio.com"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-const images = ["kaede_lv1.png", "kaede_lv2.png", "kaede_lv3.png"];
-const messages = [
-  "ちゃんちゃんぱりー",
-  "皆の10分の1くらいは飲めるようになった(？)",
-  "ノンアルでください🍺"
-];
+  let level = 1;
+  let exp = 0;
+  const maxExp = 20;
 
-function giveDrink() {
-  tapAudio.currentTime = 0;
-  tapAudio.play();
+  const levelInfo = document.getElementById("levelInfo");
+  const image = document.getElementById("charImage");
+  const message = document.getElementById("message");
+  const status = document.getElementById("status");
+  const tapAudio = document.getElementById("tapSound");
+  const levelUpAudio = document.getElementById("levelUpSound");
 
-  exp++;
-  if (exp >= maxExp) {
-    exp = 0;
-    if (level < 3) {
-      level++;
-      image.classList.add("level-up");
-      setTimeout(() => image.classList.remove("level-up"), 600);
-      levelUpAudio.currentTime = 0;
-      levelUpAudio.play();
-    }
+  const images = ["kaede_lv1.png", "kaede_lv2.png", "kaede_lv3.png"];
+  const messages = [
+    "ちゃんちゃんぱりー",
+    "皆の10分の1くらいは飲めるようになった(？)",
+    "ノンアルでください🍺"
+  ];
+
+  function updateUI() {
+    image.src = images[level - 1];
+    message.textContent = "「" + messages[level - 1] + "」";
+    levelInfo.textContent = `レベル: ${{level}（経験値: ${{exp}/${{maxExp}）`;
+    status.textContent = `攻撃力: ${{level * 500} / 防御力: ${{level * 500}`;
   }
-  image.src = images[level - 1];
-  message.textContent = "「" + messages[level - 1] + "」";
-  levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
-  status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
-}
+
+  function giveDrink() {
+    tapAudio.currentTime = 0;
+    tapAudio.play();
+
+    exp++;
+    if (exp >= maxExp) {
+      exp = 0;
+      if (level < 3) {
+        level++;
+        image.classList.add("level-up");
+        setTimeout(() => image.classList.remove("level-up"), 600);
+        levelUpAudio.currentTime = 0;
+        levelUpAudio.play();
+      }
+    }
+    updateUI();
+    db.ref("kaede").set({ level, exp });
+  }
+
+  function loadFromFirebase() {
+    db.ref("kaede").once("value").then((snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        level = data.level || 1;
+        exp = data.exp || 0;
+        updateUI();
+      }
+    });
+  }
+
+  window.onload = loadFromFirebase;
 </script>
 </body>
 </html>
