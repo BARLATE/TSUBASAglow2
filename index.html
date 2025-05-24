@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -80,20 +79,22 @@
       min-width: 120px;
       text-align: center;
     }
+
     @keyframes levelUpBounce {
-  0%   { transform: scale(1); }
-  30%  { transform: scale(1.3); }
-  60%  { transform: scale(0.9); }
-  100% { transform: scale(1); }
-}
-.level-up {
-  animation: levelUpBounce 0.6s ease;
-  box-shadow: 0 0 20px #fff, 0 0 40px #fff;
-}
+      0%   { transform: scale(1); }
+      30%  { transform: scale(1.3); }
+      60%  { transform: scale(0.9); }
+      100% { transform: scale(1); }
+    }
+    .level-up {
+      animation: levelUpBounce 0.6s ease;
+      box-shadow: 0 0 20px #fff, 0 0 40px #fff;
+    }
   </style>
 </head>
 <body>
-<audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
+  <audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
+
   <div class="top-section">
     <div class="title">TSUBASAの育成中！</div>
     <img src="tsubasa_lv1.png" alt="TSUBASA" class="character-img" id="tsubasaImage">
@@ -106,7 +107,7 @@
   <div class="bottom-section">
     <h2>他の推しキャラを育成する！</h2>
     <div class="menu-links">
-<a href="kaede.html">KAEDE</a>
+      <a href="kaede.html">KAEDE</a>
       <a href="momoa.html">MOMOA</a>
       <a href="tsubasa.html">TSUBASA</a>
       <a href="rin.html">RIN</a>
@@ -114,8 +115,6 @@
   </div>
 
   <script>
-  alert("押されたよ！");
-  
     let level = 1;
     let exp = 0;
     const maxExp = 20;
@@ -130,24 +129,20 @@
     const messages = [
       "お酒強くなりたい、、！",
       "飲みべも歌べも高いぞ🍻！",
-      "潰れると思うやん？潰れんっちゃんね〜！"
+      "潰れると思うやん？潰れんっちゃんね~！"  // ← 全角波ダッシュを半角に変更
     ];
 
     function giveDrink() {
       exp++;
       if (exp >= maxExp) {
         exp = 0;
-        if (level < 3) level++;
-        
-               // アニメーションと効果音追加
-      image.classList.add("level-up");
-      setTimeout(() => {
-        image.classList.remove("level-up");
-      }, 600);
-
-      audio.currentTime = 0;
-      audio.play();
-          }
+        if (level < 3) {
+          level++;
+          image.classList.add("level-up");
+          setTimeout(() => image.classList.remove("level-up"), 600);
+          audio.currentTime = 0;
+          audio.play();
+        }
       }
       image.src = images[level - 1];
       message.textContent = "「" + messages[level - 1] + "」";
