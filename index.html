@@ -5,85 +5,46 @@
   <title>TSUBASA育成RPG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Rounded+M+PLUS+1c&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"></script>
   <style>
     body {
       margin: 0;
-      background-color: #ff0000;
+      background: #FF0000;
       color: #fff;
       font-family: 'Rounded M PLUS 1c', sans-serif;
     }
-    .top-section {
-      padding: 20px 10px;
-      text-align: center;
-    }
-    .title {
-      font-size: 32px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
+    .top-section { padding: 20px 10px; text-align: center; }
+    .title { font-size: 32px; font-weight: bold; margin-bottom: 10px; }
     .character-img {
-      width: 80vw;
-      max-width: 300px;
-      height: auto;
-      border-radius: 20px;
-      box-shadow: 0 0 12px #fff;
+      width: 80vw; max-width: 300px; height: auto;
+      border-radius: 20px; box-shadow: 0 0 12px #fff;
     }
-    .message {
-      margin-top: 10px;
-      font-size: 20px;
-    }
-    .level-info, .status {
-      margin-top: 8px;
-      font-size: 18px;
-    }
+    .message { margin-top: 10px; font-size: 20px; }
+    .level-info, .status { margin-top: 8px; font-size: 18px; }
     button {
-      margin-top: 15px;
-      padding: 16px 24px;
-      font-size: 20px;
-      font-weight: bold;
-      background-color: #ffffff;
-      color: #ff0000;
-      border: none;
-      border-radius: 30px;
-      width: 90%;
-      max-width: 360px;
+      margin-top: 15px; padding: 16px 24px; font-size: 20px;
+      font-weight: bold; background-color: #fff;
+      color: #FF0000; border: none; border-radius: 30px;
+      width: 90%; max-width: 360px;
     }
-
     .bottom-section {
-      background-color: #fff;
-      color: #ff0000;
-      padding: 30px 10px;
-      width: 100%;
-      text-align: center;
-    }
-    .bottom-section h2 {
-      margin-bottom: 20px;
-      font-size: 22px;
+      background-color: #fff; color: #FF0000; padding: 30px 10px;
+      width: 100%; text-align: center;
     }
     .menu-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 16px;
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;
     }
     .menu-links a {
-      display: inline-block;
-      padding: 16px;
-      background-color: #ffcccc;
-      border-radius: 12px;
-      text-decoration: none;
-      color: #d00000;
-      font-weight: bold;
-      font-size: 18px;
-      width: 40vw;
-      min-width: 120px;
-      text-align: center;
+      display: inline-block; padding: 16px; background-color: #ffe;
+      border-radius: 12px; text-decoration: none; color: #FF0000;
+      font-weight: bold; font-size: 18px; width: 40vw;
+      min-width: 120px; text-align: center;
     }
-
     @keyframes levelUpBounce {
-      0%   { transform: scale(1); }
-      30%  { transform: scale(1.3); }
-      60%  { transform: scale(0.9); }
+      0% { transform: scale(1); }
+      30% { transform: scale(1.3); }
+      60% { transform: scale(0.9); }
       100% { transform: scale(1); }
     }
     .level-up {
@@ -94,67 +55,96 @@
 </head>
 <body>
 <audio id="tapSound" src="tap.mp3" preload="auto"></audio>
-  <audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
+<audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
 
-  <div class="top-section">
-    <div class="title">TSUBASAの育成中！</div>
-    <img src="tsubasa_lv1.png" alt="TSUBASA" class="character-img" id="tsubasaImage">
-    <div class="message" id="message">「お酒強くなりたい、、」</div>
-    <div class="level-info" id="levelInfo">レベル: 1（経験値: 0/20）</div>
-    <div class="status" id="status">攻撃力: 500 / 防御力: 500</div>
-    <button onclick="giveDrink()">お酒をあげる</button>
+<div class="top-section">
+  <div class="title">TSUBASAの育成中！</div>
+  <img src="tsubasa_lv1.png" alt="TSUBASA" class="character-img" id="charImage">
+  <div class="message" id="message">「お酒強くなりたい、、！」</div>
+  <div class="level-info" id="levelInfo">レベル: 1（経験値: 0/20）</div>
+  <div class="status" id="status">攻撃力: 500 / 防御力: 500</div>
+  <button onclick="giveDrink()">お酒をあげる</button>
+</div>
+
+<div class="bottom-section">
+  <h2>他の推しキャラを育成する！</h2>
+  <div class="menu-links">
+    <a href="index.html">TSUBASA</a>
+    <a href="momoa.html">MOMOA</a>
+    <a href="kaede.html">KAEDE</a>
+    <a href="rin.html">RIN</a>
   </div>
+</div>
 
-  <div class="bottom-section">
-    <h2>他の推しキャラを育成する！</h2>
-    <div class="menu-links">
-      <a href="kaede.html">KAEDE</a>
-      <a href="momoa.html">MOMOA</a>
-      <a href="tsubasa.html">TSUBASA</a>
-      <a href="rin.html">RIN</a>
-    </div>
-  </div>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCaj8C14EeYBYxZWUmDqwcdGJYf6GOQ0QU",
+    authDomain: "barlate.firebaseapp.com",
+    projectId: "barlate",
+    storageBucket: "barlate.appspot.com",
+    messagingSenderId: "773411539842",
+    appId: "1:773411539842:web:3a436c6db73faa43b4dd9b",
+    databaseURL: "https://barlate.firebaseio.com"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-  <script>
-    let level = 1;
-    let exp = 0;
-    const maxExp = 20;
+  let level = 1;
+  let exp = 0;
+  const maxExp = 20;
 
-    const levelInfo = document.getElementById("levelInfo");
-    const image = document.getElementById("tsubasaImage");
-    const message = document.getElementById("message");
-    const status = document.getElementById("status");
-    const tapAudio = document.getElementById("tapSound");
-    const audio = document.getElementById("levelUpSound");
+  const levelInfo = document.getElementById("levelInfo");
+  const image = document.getElementById("charImage");
+  const message = document.getElementById("message");
+  const status = document.getElementById("status");
+  const tapAudio = document.getElementById("tapSound");
+  const levelUpAudio = document.getElementById("levelUpSound");
 
-    const images = ["tsubasa_lv1.png", "tsubasa_lv2.png", "tsubasa_lv3.png"];
-    const messages = [
-      "お酒強くなりたい、、！",
-      "飲みべも歌べも高いぞ🍻！",
-      "潰れると思うやん？潰れんっちゃんね~！"  // ← 全角波ダッシュを半角に変更
-    ];
+  const images = ["tsubasa_lv1.png", "tsubasa_lv2.png", "tsubasa_lv3.png"];
+  const messages = [
+    "お酒強くなりたい、、！",
+    "飲みべも歌べも高いぞ🍻！",
+    "潰れると思うやん？潰れんっちゃんね~！"
+  ];
 
-    function giveDrink() {
-    
+  function updateUI() {
+    image.src = images[level - 1];
+    message.textContent = "「" + messages[level - 1] + "」";
+    levelInfo.textContent = `レベル: ${{level}（経験値: ${{exp}/${{maxExp}）`;
+    status.textContent = `攻撃力: ${{level * 500} / 防御力: ${{level * 500}`;
+  }
+
+  function giveDrink() {
     tapAudio.currentTime = 0;
-  tapAudio.play();
-  
-      exp++;
-      if (exp >= maxExp) {
-        exp = 0;
-        if (level < 3) {
-          level++;
-          image.classList.add("level-up");
-          setTimeout(() => image.classList.remove("level-up"), 600);
-           levelUpaudio.currentTime = 0;
-           levelUpaudio.play();
-        }
+    tapAudio.play();
+
+    exp++;
+    if (exp >= maxExp) {
+      exp = 0;
+      if (level < 3) {
+        level++;
+        image.classList.add("level-up");
+        setTimeout(() => image.classList.remove("level-up"), 600);
+        levelUpAudio.currentTime = 0;
+        levelUpAudio.play();
       }
-      image.src = images[level - 1];
-      message.textContent = "「" + messages[level - 1] + "」";
-      levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
-      status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
     }
-  </script>
+    updateUI();
+    db.ref("tsubasa").set({ level, exp });
+  }
+
+  function loadFromFirebase() {
+    db.ref("tsubasa").once("value").then((snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        level = data.level || 1;
+        exp = data.exp || 0;
+        updateUI();
+      }
+    });
+  }
+
+  window.onload = loadFromFirebase;
+</script>
 </body>
 </html>
