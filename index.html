@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>TSUBASA育成RPG</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(#ffecec, #fff);
+      text-align: center;
+      padding: 30px;
+    }
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #d6336c;
+      margin-bottom: 10px;
+    }
+    .level {
+      font-size: 18px;
+      margin: 20px 0;
+    }
+    .serif {
+      font-size: 16px;
+      margin: 10px 0;
+      color: #444;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #ff5e99;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #tsubasaImage {
+      width: 220px;
+      border-radius: 20px;
+      margin: 20px auto;
+      box-shadow: 0 0 12px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="title" id="username">TSUBASAの育成中！</div>
+  <img src="tsubasa_lv1.png" alt="TSUBASA" id="tsubasaImage">
+  <div class="level" id="levelInfo">レベル: 1（経験値: 0/5）</div>
+  <div class="serif" id="serif">「がんばって育ててね！」</div>
+  <button onclick="giveDrink()">お酒をあげる</button>
+
+  <script>
+    let exp = 0;
+    let level = 1;
+
+    const images = {
+      1: "tsubasa_lv1.png",
+      2: "tsubasa_lv2.png",
+      3: "tsubasa_lv3.png"
+    };
+
+    const serifs = {
+      1: "「がんばって育ててね！」",
+      2: "「ちょっと大人になった気がする！」",
+      3: "「最強に輝いてるって感じ！」"
+    };
+
+    function updateDisplay() {
+      document.getElementById("tsubasaImage").src = images[level] || images[3];
+      document.getElementById("serif").innerText = serifs[level] || "";
+      document.getElementById("levelInfo").innerText = `レベル: ${level}（経験値: ${exp}/15）`;
+    }
+
+    function giveDrink() {
+      exp++;
+      if (exp >= 15) {
+        if (level < 3) level++;
+        exp = 0;
+        alert("TSUBASAがレベルアップしたよ！");
+      }
+      updateDisplay();
+    }
+
+    window.onload = updateDisplay;
+  </script>
+</body>
+</html>
