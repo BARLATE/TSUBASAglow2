@@ -4,13 +4,28 @@
   <meta charset="UTF-8">
   <title>MOMOA育成RPG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="="https://fonts.googleapis.com/css2?family=Rounded+M+PLUS+1c&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rounded+M+PLUS+1c&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       background: #FFD700; /* イエロー背景 */
       color: #fff;
       font-family: 'Rounded M PLUS 1c', sans-serif;
+    }
+    .menu {
+      background: #fff;
+      color: #FFD700;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      font-weight: bold;
+    }
+    .menu a {
+      text-decoration: none;
+      color: #FFD700;
+      padding: 6px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.8);
     }
     .top-section {
       padding: 20px 10px;
@@ -53,6 +68,14 @@
 <body>
 <audio id="tapSound" src="tap.mp3" preload="auto"></audio>
 <audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
+
+<!-- キャラ切替メニュー -->
+<div class="menu">
+  <a href="index.html">TSUBASA</a>
+  <a href="kaede.html">KAEDE</a>
+  <a href="momoa.html">MOMOA</a>
+  <a href="rin.html">RIN</a>
+</div>
 
 <div class="top-section">
   <div class="title">MOMOAの育成中！</div>
