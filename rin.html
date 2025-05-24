@@ -87,19 +87,20 @@
       text-align: center;
     }
     @keyframes levelUpBounce {
-  0%   { transform: scale(1); }
-  30%  { transform: scale(1.3); }
-  60%  { transform: scale(0.9); }
-  100% { transform: scale(1); }
-}
-.level-up {
-  animation: levelUpBounce 0.6s ease;
-  box-shadow: 0 0 20px #fff, 0 0 40px #fff;
-}
+      0%   { transform: scale(1); }
+      30%  { transform: scale(1.3); }
+      60%  { transform: scale(0.9); }
+      100% { transform: scale(1); }
+    }
+    .level-up {
+      animation: levelUpBounce 0.6s ease;
+      box-shadow: 0 0 20px #fff, 0 0 40px #fff;
+    }
   </style>
 </head>
 <body>
 <audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
+
   <div class="top-section">
     <div class="title">RINの育成中！</div>
     <img src="rin_lv1.png" alt="RIN" class="character-img" id="rinImage">
@@ -119,7 +120,6 @@
     </div>
   </div>
 
-
   <script>
     let level = 1;
     let exp = 0;
@@ -130,11 +130,11 @@
     const message = document.getElementById("message");
     const status = document.getElementById("status");
     const audio = document.getElementById("levelUpSound");
-    
+
     const images = ["rin_lv1.png", "rin_lv2.png", "rin_lv3.png"];
     const messages = [
       "さあ、飲ませなさい⚛️",
-      "まだおげ飲めぐよ〜〜",
+      "まだおげ飲めぐよ~~", // ← 全角波ダッシュを半角2つに変更
       "おげにえごがってもいいよ？"
     ];
 
@@ -142,19 +142,14 @@
       exp++;
       if (exp >= maxExp) {
         exp = 0;
-        if (level < 3) level++;
-        
-       // アニメーションと効果音追加
-      image.classList.add("level-up");
-      setTimeout(() => {
-        image.classList.remove("level-up");
-      }, 600);
-
-      audio.currentTime = 0;
-      audio.play();
-          }
+        if (level < 3) {
+          level++;
+          image.classList.add("level-up");
+          setTimeout(() => image.classList.remove("level-up"), 600);
+          audio.currentTime = 0;
+          audio.play();
+        }
       }
-      
       image.src = images[level - 1];
       message.textContent = "「" + messages[level - 1] + "」";
       levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
