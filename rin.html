@@ -8,46 +8,45 @@
   <style>
     body {
       margin: 0;
-      background: #800080;
+      background: #800080; /* パープル背景 */
       color: #fff;
       font-family: 'Rounded M PLUS 1c', sans-serif;
     }
-    .top-section { padding: 20px 10px; text-align: center; }
-    .title { font-size: 32px; font-weight: bold; margin-bottom: 10px; }
+    .top-section {
+      padding: 20px 10px;
+      text-align: center;
+    }
+    .title {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
     .character-img {
-      width: 80vw; max-width: 300px; height: auto;
-      border-radius: 20px; box-shadow: 0 0 12px #fff;
+      width: 80vw;
+      max-width: 300px;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 0 12px #fff;
     }
-    .message { margin-top: 10px; font-size: 20px; }
-    .level-info, .status { margin-top: 8px; font-size: 18px; }
+    .message {
+      margin-top: 10px;
+      font-size: 20px;
+    }
+    .level-info, .status {
+      margin-top: 8px;
+      font-size: 18px;
+    }
     button {
-      margin-top: 15px; padding: 16px 24px; font-size: 20px;
-      font-weight: bold; background-color: #fff;
-      color: #800080; border: none; border-radius: 30px;
-      width: 90%; max-width: 360px;
-    }
-    .bottom-section {
-      background-color: #fff; color: #800080; padding: 30px 10px;
-      width: 100%; text-align: center;
-    }
-    .menu-links {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;
-    }
-    .menu-links a {
-      display: inline-block; padding: 16px; background-color: #e6ccff;
-      border-radius: 12px; text-decoration: none; color: #4b0082;
-      font-weight: bold; font-size: 18px; width: 40vw;
-      min-width: 120px; text-align: center;
-    }
-    @keyframes levelUpBounce {
-      0% { transform: scale(1); }
-      30% { transform: scale(1.3); }
-      60% { transform: scale(0.9); }
-      100% { transform: scale(1); }
-    }
-    .level-up {
-      animation: levelUpBounce 0.6s ease;
-      box-shadow: 0 0 20px #fff, 0 0 40px #fff;
+      margin-top: 15px;
+      padding: 16px 24px;
+      font-size: 20px;
+      font-weight: bold;
+      background-color: #fff;
+      color: #800080;
+      border: none;
+      border-radius: 30px;
+      width: 90%;
+      max-width: 360px;
     }
   </style>
 </head>
@@ -64,54 +63,52 @@
   <button onclick="giveDrink()">お酒をあげる</button>
 </div>
 
-<div class="bottom-section">
-  <h2>他の推しキャラを育成する！</h2>
-  <div class="menu-links">
-    <a href="index.html">TSUBASA</a>
-    <a href="momoa.html">MOMOA</a>
-    <a href="kaede.html">KAEDE</a>
-    <a href="rin.html">RIN</a>
-  </div>
-</div>
-
 <script>
-let level = 1;
-let exp = 0;
-const maxExp = 20;
-const levelInfo = document.getElementById("levelInfo");
-const image = document.getElementById("rinImage");
-const message = document.getElementById("message");
-const status = document.getElementById("status");
-const tapAudio = document.getElementById("tapSound");
-const levelUpAudio = document.getElementById("levelUpSound");
+  let level = parseInt(localStorage.getItem("rin_level")) || 1;
+  let exp = parseInt(localStorage.getItem("rin_exp")) || 0;
+  const maxExp = 20;
 
-const images = ["rin_lv1.png", "rin_lv2.png", "rin_lv3.png"];
-const messages = [
-  "さあ、飲ませなさい⚛️",
-  "まだおげ飲めぐよ~~",
-  "おげにえごがってもいいよ？"
-];
+  const levelInfo = document.getElementById("levelInfo");
+  const image = document.getElementById("rinImage");
+  const message = document.getElementById("message");
+  const status = document.getElementById("status");
+  const tapAudio = document.getElementById("tapSound");
+  const levelUpAudio = document.getElementById("levelUpSound");
 
-function giveDrink() {
-  tapAudio.currentTime = 0;
-  tapAudio.play();
+  const images = ["rin_lv1.png", "rin_lv2.png", "rin_lv3.png"];
+  const messages = [
+    "さあ、飲ませなさい⚛️",
+    "まだおげ飲めぐよ〜〜",
+    "おげにえごがってもいいよ？"
+  ];
 
-  exp++;
-  if (exp >= maxExp) {
-    exp = 0;
-    if (level < 3) {
-      level++;
-      image.classList.add("level-up");
-      setTimeout(() => image.classList.remove("level-up"), 600);
-      levelUpAudio.currentTime = 0;
-      levelUpAudio.play();
-    }
+  function updateDisplay() {
+    image.src = images[level - 1];
+    message.textContent = "「" + messages[level - 1] + "」";
+    levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
+    status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
   }
-  image.src = images[level - 1];
-  message.textContent = "「" + messages[level - 1] + "」";
-  levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
-  status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
-}
+
+  function giveDrink() {
+    tapAudio.currentTime = 0;
+    tapAudio.play();
+
+    exp++;
+    if (exp >= maxExp) {
+      exp = 0;
+      if (level < 3) {
+        level++;
+        levelUpAudio.currentTime = 0;
+        levelUpAudio.play();
+      }
+    }
+
+    localStorage.setItem("rin_level", level);
+    localStorage.setItem("rin_exp", exp);
+    updateDisplay();
+  }
+
+  window.onload = updateDisplay;
 </script>
 </body>
 </html>
