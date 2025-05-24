@@ -104,14 +104,14 @@
   const messages = [
     "お酒強くなりたい、、！",
     "飲みべも歌べも高いぞ🍻！",
-    "潰れると思うやん？潰れんっちゃんね~！"
+    "潰れると思うやん？潰れんっちゃんね〜！"
   ];
 
   function updateUI() {
     image.src = images[level - 1];
     message.textContent = "「" + messages[level - 1] + "」";
-    levelInfo.textContent = `レベル: ${{level}（経験値: ${{exp}/${{maxExp}）`;
-    status.textContent = `攻撃力: ${{level * 500} / 防御力: ${{level * 500}`;
+    levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
+    status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
   }
 
   function giveDrink() {
