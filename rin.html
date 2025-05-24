@@ -119,6 +119,8 @@
     </div>
   </div>
 
+<audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
+
   <script>
     let level = 1;
     let exp = 0;
@@ -150,7 +152,7 @@
 
       audio.currentTime = 0;
       audio.play();
-    
+          }
       }
       image.src = images[level - 1];
       message.textContent = "「" + messages[level - 1] + "」";
