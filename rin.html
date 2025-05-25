@@ -8,9 +8,11 @@
   <style>
     body {
       margin: 0;
-      background: #800080; /* パープル背景 */
+      background: #800080;
       color: #fff;
       font-family: 'Rounded M PLUS 1c', sans-serif;
+      position: relative;
+      overflow-x: hidden;
     }
     .menu {
       background: #fff;
@@ -42,6 +44,7 @@
       height: auto;
       border-radius: 20px;
       box-shadow: 0 0 12px #fff;
+      transition: transform 0.5s ease;
     }
     .message {
       margin-top: 10px;
@@ -64,20 +67,47 @@
       max-width: 360px;
     }
     .exp-bar {
-  width: 90%;
-  max-width: 360px;
-  height: 20px;
-  background: #fff;
-  border-radius: 10px;
-  overflow: hidden;
-  margin: 10px auto;
-}
-.exp-fill {
-  height: 100%;
-  background: #800080; /* 黄色っぽい。キャラごとに変更可 */
-  width: 0%;
-  transition: width 0.3s ease;
-}
+      width: 90%;
+      max-width: 360px;
+      height: 20px;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 10px auto;
+    }
+    .exp-fill {
+      height: 100%;
+      background: #800080;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    @keyframes levelUpEffect {
+      0% { transform: scale(1); opacity: 1; filter: brightness(1); }
+      30% { transform: scale(1.1); filter: brightness(1.5); }
+      50% { transform: scale(1.2); opacity: 0.8; filter: brightness(2); }
+      100% { transform: scale(1); opacity: 1; filter: brightness(1); }
+    }
+    .level-up-animation {
+      animation: levelUpEffect 1s ease-in-out;
+    }
+
+    .effect-flash {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: white;
+      opacity: 0;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    .flash-on {
+      animation: flashAnim 0.3s ease-out;
+    }
+    @keyframes flashAnim {
+      0% { opacity: 0.8; }
+      100% { opacity: 0; }
+    }
   </style>
 </head>
 <body>
@@ -85,7 +115,8 @@
 <audio id="tapSound" src="tap.mp3" preload="auto"></audio>
 <audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
 
-<!-- キャラ切替メニュー -->
+<div class="effect-flash" id="flashEffect"></div>
+
 <div class="menu">
   <a href="index.html">TSUBASA</a>
   <a href="kaede.html">KAEDE</a>
@@ -99,21 +130,13 @@
   <div class="message" id="message">「さあ、飲ませなさい⚛️」</div>
   <div class="level-info" id="levelInfo">レベル: 1（経験値: 0/20）</div>
   <div class="status" id="status">攻撃力: 500 / 防御力: 500</div>
-  <div class="exp-bar">
-  <div class="exp-fill" id="expFill"></div>
-</div>
-<!-- スキル演出メッセージ（レベルアップ時だけ表示） -->
-<div id="levelUpMessage" style="display:none; font-weight:bold; font-size:20px; margin-top:10px;"></div>
-<div id="rewardMessage" style="display:none; font-size:18px;"></div>
-
-<div id="skillBox"
-     onclick="showSkillDetail()"
-     style="display:none; margin-top:12px; padding:10px 18px; background:#fff; color:#8000FF; font-weight:bold; border-radius:12px; width:fit-content; margin-left:auto; margin-right:auto; cursor:pointer; box-shadow: 0 0 6px #B266FF, 0 0 12px #8000FF, 0 0 18px #9932CC;">
-</div>
-
-<!-- スキル内容を表示するエリア -->
-<div id="skillDetailMessage" style="display:none; margin-top:10px; font-size:16px; text-align:center; background: rgba(255,255,255,0.9); color: #333; padding: 8px 12px; border-radius: 10px; width: fit-content; margin-left:auto; margin-right:auto;"></div>
-
+  <div class="exp-bar"><div class="exp-fill" id="expFill"></div></div>
+  <div id="levelUpMessage" style="display:none; font-weight:bold; font-size:20px; margin-top:10px;"></div>
+  <div id="rewardMessage" style="display:none; font-size:18px;"></div>
+  <div id="skillBox"
+       onclick="showSkillDetail()"
+       style="display:none; margin-top:12px; padding:10px 18px; background:#fff; color:#8000FF; font-weight:bold; border-radius:12px; width:fit-content; margin:auto; cursor:pointer; box-shadow: 0 0 6px #B266FF, 0 0 12px #8000FF, 0 0 18px #9932CC;"></div>
+  <div id="skillDetailMessage" style="display:none; margin-top:10px; font-size:16px; text-align:center; background: rgba(255,255,255,0.9); color: #333; padding: 8px 12px; border-radius: 10px; width: fit-content; margin:auto;"></div>
   <button onclick="giveDrink()">お酒をあげる</button>
   <button onclick="resetProgress()">リセットする</button>
 </div>
@@ -142,7 +165,25 @@
     message.textContent = "「" + messages[level - 1] + "」";
     levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
     status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
-  } 
+  }
+
+  function flashEffect() {
+    const flash = document.getElementById("flashEffect");
+    flash.classList.add("flash-on");
+    setTimeout(() => {
+      flash.classList.remove("flash-on");
+    }, 300);
+  }
+
+  function levelUpAnimation(newLevel) {
+    image.classList.remove("level-up-animation");
+    void image.offsetWidth;
+    image.classList.add("level-up-animation");
+    flashEffect();
+    setTimeout(() => {
+      image.src = images[newLevel - 1];
+    }, 500);
+  }
 
   function giveDrink() {
     tapAudio.currentTime = 0;
@@ -155,74 +196,76 @@
         level++;
         levelUpAudio.currentTime = 0;
         levelUpAudio.play();
+        levelUpAnimation(level);
         showLevelUp(level);
       }
     }
 
- document.getElementById("expFill").style.width = `${(exp / maxExp) * 100}%`; 
-
+    document.getElementById("expFill").style.width = `${(exp / maxExp) * 100}%`;
     localStorage.setItem("rin_level", level);
     localStorage.setItem("rin_exp", exp);
     updateDisplay();
   }
-  
+
   function resetProgress() {
-  if (confirm("本当にリセットしますか？")) {
-    localStorage.removeItem("tsubasa_level");
-    localStorage.removeItem("tsubasa_exp");
-    level = 1;
-    exp = 0;
-    updateDisplay();
-    alert("データをリセットしました！");
+    if (confirm("本当にリセットしますか？")) {
+      localStorage.removeItem("rin_level");
+      localStorage.removeItem("rin_exp");
+      level = 1;
+      exp = 0;
+      updateDisplay();
+      alert("データをリセットしました！");
+    }
   }
-}
 
-  window.onload = updateDisplay;
-    expFill.style.width = "0%"
-    updateDisplay();
-    updateSkillDisplay();
-    function showSkillDetail() {
-const skillDescriptions = ["", "押すたびにら行の言葉を言う", "サブマリンのバック2倍（1回限り）"];
-  if (level >= 2) {
-    const skillText = skillDescriptions[level - 1];
-    const detailBox = document.getElementById("skillDetailMessage");
-    detailBox.innerText = skillText;
-    detailBox.style.display = "block";
+  function showSkillDetail() {
+    const skillDescriptions = ["", "押すたびにら行の言葉を言う", "サブマリンのバック2倍（1回限り）"];
+    if (level >= 2) {
+      const skillText = skillDescriptions[level - 1];
+      const detailBox = document.getElementById("skillDetailMessage");
+      detailBox.innerText = skillText;
+      detailBox.style.display = "block";
+      setTimeout(() => {
+        detailBox.style.display = "none";
+      }, 3000);
+    }
+  }
 
-    // 3秒後に自動で非表示
+  function showLevelUp(newLevel) {
+    const skillNames = ["", "舌足らず", "山中サブマりん"];
+    const skillMsg = `RINは【${skillNames[newLevel - 1]}】を覚えた！`;
+    const rewardMsg = `レベルアップ報酬🙌🏻！チェキor特製ドリンクをプレゼント🎁！`;
+
+    document.getElementById('levelUpMessage').innerText = skillMsg;
+    document.getElementById('rewardMessage').innerText = rewardMsg;
+    document.getElementById('levelUpMessage').style.display = 'block';
+    document.getElementById('rewardMessage').style.display = 'block';
+
     setTimeout(() => {
-      detailBox.style.display = "none";
-    }, 3000);
+      document.getElementById('levelUpMessage').style.display = 'none';
+      document.getElementById('rewardMessage').style.display = 'none';
+      updateSkillDisplay();
+    }, 10000);
   }
-}
-    function showLevelUp(newLevel) {
-  const skillNames = ["", "舌足らず", "山中サブマりん"];
-  const skillMsg = `RINは【${skillNames[newLevel - 1]}】を覚えた！`;
-  const rewardMsg = `レベルアップ報酬🙌🏻！チェキor特製ドリンクをプレゼント🎁！`;
 
-  document.getElementById('levelUpMessage').innerText = skillMsg;
-  document.getElementById('rewardMessage').innerText = rewardMsg;
-  document.getElementById('levelUpMessage').style.display = 'block';
-  document.getElementById('rewardMessage').style.display = 'block';
+  function updateSkillDisplay() {
+    const skillNames = ["", "舌足らず", "山中サブマりん"];
+    if (level >= 2) {
+      const skillText = `スキル：${skillNames[level - 1]}`;
+      const skillBox = document.getElementById('skillBox');
+      skillBox.textContent = skillText;
+      skillBox.style.display = 'block';
+    } else {
+      document.getElementById('skillBox').style.display = 'none';
+    }
+  }
 
-  // 10秒後に非表示 & スキル表示更新
-  setTimeout(() => {
-    document.getElementById('levelUpMessage').style.display = 'none';
-    document.getElementById('rewardMessage').style.display = 'none';
+  window.onload = () => {
+    updateDisplay();
     updateSkillDisplay();
-  }, 10000); // 10秒後
-}
-function updateSkillDisplay() {
-  const skillNames = ["", "舌足らず", "山中サブマりん"];
-  if (level >= 2) {
-    const skillText = `スキル：${skillNames[level - 1]}`;
-    const skillBox = document.getElementById('skillBox');
-    skillBox.textContent = skillText;
-    skillBox.style.display = 'block';
-  } else {
-    document.getElementById('skillBox').style.display = 'none';
-  }
-}
+    document.getElementById("expFill").style.width = `${(exp / maxExp) * 100}%`;
+  };
 </script>
+
 </body>
 </html>
