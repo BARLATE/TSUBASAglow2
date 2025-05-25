@@ -76,11 +76,29 @@
   height: 100%;
   background: #fff176; /* 黄色っぽい。キャラごとに変更可 */
   width: 0%;
+  border: 1px solid red;
   transition: width 0.3s ease;
 }
   </style>
 </head>
 <body>
+
+<div style="text-align:center; margin-top:20px;">
+    <canvas id="qr-code"></canvas>
+    <p style="font-size:14px;">このページのQRコード</p>
+  </div>
+
+  <!-- QRiousライブラリ -->
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+  <script>
+    const qr = new QRious({
+      element: document.getElementById('qr-code'),
+      value: window.location.href,
+      size: 150
+      background: '#fff',
+    foreground: '#FFD700'
+     
+
 <audio id="tapSound" src="tap.mp3" preload="auto"></audio>
 <audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
 
