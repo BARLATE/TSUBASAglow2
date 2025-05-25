@@ -102,6 +102,10 @@
   <div class="exp-bar">
   <div class="exp-fill" id="expFill"></div>
 </div>
+<!-- レベルアップ演出＆スキル表示 -->
+<div id="levelUpMessage" style="display:none; font-weight:bold; font-size:20px; margin-top:10px;"></div>
+<div id="rewardMessage" style="display:none; font-size:18px;"></div>
+<div id="skillDisplay" style="margin-top:10px; font-weight:bold; font-size:18px;"></div>
   <button onclick="giveDrink()">お酒をあげる</button>
   <button onclick="resetProgress()">リセットする</button>
 </div>
@@ -143,6 +147,7 @@
         level++;
         levelUpAudio.currentTime = 0;
         levelUpAudio.play();
+        showLevelUp(level);
       }
     }
 
@@ -166,6 +171,27 @@
 
   window.onload = updateDisplay;
     expFill.style.width = "0%"
+    updateSkillDisplay();
+    function showLevelUp(newLevel) {
+  const skillNames = ["", "生粋の酒好き", "ゴールド"];
+  const skillMsg = `MOMOAは【${skillNames[newLevel - 1]}】を覚えた！`;
+  const rewardMsg = `レベルアップ報酬🙌🏻！チェキor特製ドリンクをプレゼント🎁！`;
+
+  document.getElementById('levelUpMessage').innerText = skillMsg;
+  document.getElementById('levelUpMessage').style.display = 'block';
+
+  setTimeout(() => {
+    document.getElementById('rewardMessage').innerText = rewardMsg;
+    document.getElementById('rewardMessage').style.display = 'block';
+  }, 1500);
+}
+
+function updateSkillDisplay() {
+  let skillText = '';
+  if (level === 2) skillText = 'スキル：生粋の酒好き';
+  else if (level === 3) skillText = 'スキル：ゴールド';
+  document.getElementById('skillDisplay').innerText = skillText;
+}
 </script>
 </body>
 </html>
