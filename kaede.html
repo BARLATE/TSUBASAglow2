@@ -99,6 +99,9 @@
   <div class="message" id="message">「ちゃんちゃんぱりー」</div>
   <div class="level-info" id="levelInfo">レベル: 1（経験値: 0/20）</div>
   <div class="status" id="status">攻撃力: 500 / 防御力: 500</div>
+  <div class="exp-bar">
+  <div class="exp-fill" id="expFill"></div>
+</div>
   <button onclick="giveDrink()">お酒をあげる</button>
   <button onclick="resetProgress()">リセットする</button>
 </div>
@@ -128,8 +131,6 @@
     levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
     status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
   }
-  
-  document.getElementById("expFill").style.width = `${(exp / maxExp) * 100}%`;
 
   function giveDrink() {
     tapAudio.currentTime = 0;
@@ -144,6 +145,8 @@
         levelUpAudio.play();
       }
     }
+    
+      document.getElementById("expFill").style.width = `${(exp / maxExp) * 100}%`;
 
     localStorage.setItem("kaede_level", level);
     localStorage.setItem("kaede_exp", exp);
@@ -162,6 +165,7 @@
 }
 
   window.onload = updateDisplay;
+  expFill.style.width = "0%"
 </script>
 </body>
 </html>
