@@ -102,10 +102,12 @@
   <div class="exp-bar">
   <div class="exp-fill" id="expFill"></div>
 </div>
-<!-- レベルアップ演出＆スキル表示 -->
+<!-- スキル演出メッセージ（レベルアップ時だけ表示） -->
 <div id="levelUpMessage" style="display:none; font-weight:bold; font-size:20px; margin-top:10px;"></div>
 <div id="rewardMessage" style="display:none; font-size:18px;"></div>
-<div id="skillDisplay" style="margin-top:10px; font-weight:bold; font-size:18px;"></div>
+
+<div id="skillBox" style="display:none; margin-top:12px; padding:10px 18px; background:#fff; color:#FF69B4; font-weight:bold; border-radius:12px; width:fit-content; margin-left:auto; margin-right:auto;"></div>
+
   <button onclick="giveDrink()">お酒をあげる</button>
   <button onclick="resetProgress()">リセットする</button>
 </div>
@@ -171,6 +173,7 @@
 
   window.onload = updateDisplay;
   expFill.style.width = "0%"
+  updateDisplay();
   updateSkillDisplay();
   function showLevelUp(newLevel) {
   const skillNames = ["", "ちゃんちゃんぱりー", "ゴールドブースト"];
@@ -178,19 +181,27 @@
   const rewardMsg = `レベルアップ報酬🙌🏻！チェキor特製ドリンクをプレゼント🎁！`;
 
   document.getElementById('levelUpMessage').innerText = skillMsg;
+  document.getElementById('rewardMessage').innerText = rewardMsg;
   document.getElementById('levelUpMessage').style.display = 'block';
+  document.getElementById('rewardMessage').style.display = 'block';
 
+  // 10秒後に非表示 & スキル表示更新
   setTimeout(() => {
-    document.getElementById('rewardMessage').innerText = rewardMsg;
-    document.getElementById('rewardMessage').style.display = 'block';
-  }, 1500);
+    document.getElementById('levelUpMessage').style.display = 'none';
+    document.getElementById('rewardMessage').style.display = 'none';
+    updateSkillDisplay();
+  }, 10000); // 10秒後
 }
-
 function updateSkillDisplay() {
-  let skillText = '';
-  if (level === 2) skillText = 'スキル：ちゃんちゃんぱりー';
-  else if (level === 3) skillText = 'スキル：ゴールドブースト';
-  document.getElementById('skillDisplay').innerText = skillText;
+  const skillNames = ["", "ちゃんちゃんぱりー", "ゴールドブースト"];
+  if (level >= 2) {
+    const skillText = `スキル：${skillNames[level - 1]}`;
+    const skillBox = document.getElementById('skillBox');
+    skillBox.textContent = skillText;
+    skillBox.style.display = 'block';
+  } else {
+    document.getElementById('skillBox').style.display = 'none';
+  }
 }
 </script>
 </body>
