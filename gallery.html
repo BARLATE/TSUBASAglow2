@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>キャラ育成ギャラリー</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Rounded+M+PLUS+1c:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background: #fff;
+      color: #000;
+      font-family: 'Rounded M PLUS 1c', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .logo {
+      width: 60%;
+      max-width: 280px;
+      margin: 10px auto;
+      display: block;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      width: 100%;
+      max-width: 800px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    .character {
+      text-align: center;
+    }
+    .character img {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 12px;
+    }
+    .character-name {
+      font-size: 6vw;
+      font-weight: 900;
+      margin-top: 5px;
+      text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 2px 2px 5px rgba(0,0,0,0.2);
+    }
+    .tsubasa { color: #FF4444; }
+    .kaede { color: #FF69B4; }
+    .rin { color: #800080; }
+    .momoa { color: #FFD700; }
+
+    @media (min-width: 600px) {
+      .character-name {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ロゴ -->
+  <img src="8CB9D9FF-90AB-4F06-82BE-009D9F31D68C.jpeg" alt="BAR LATE ロゴ" class="logo">
+
+  <!-- キャラ一覧 -->
+  <div class="grid">
+
+    <!-- TSUBASA -->
+    <div class="character">
+      <img src="tsubasa_lv1.png" id="tsubasaImg">
+      <div class="character-name tsubasa">TSUBASA Lv.<span id="tsubasaLevel">1</span></div>
+    </div>
+
+    <!-- KAEDE -->
+    <div class="character">
+      <img src="kaede_lv1.png" id="kaedeImg">
+      <div class="character-name kaede">KAEDE Lv.<span id="kaedeLevel">1</span></div>
+    </div>
+
+    <!-- RIN -->
+    <div class="character">
+      <img src="rin_lv1.png" id="rinImg">
+      <div class="character-name rin">RIN Lv.<span id="rinLevel">1</span></div>
+    </div>
+
+    <!-- MOMOA -->
+    <div class="character">
+      <img src="momoa_lv1.png" id="momoaImg">
+      <div class="character-name momoa">MOMOA Lv.<span id="momoaLevel">1</span></div>
+    </div>
+
+  </div>
+
+  <script>
+    const characters = ["tsubasa", "kaede", "rin", "momoa"];
+    characters.forEach(name => {
+      const level = parseInt(localStorage.getItem(name + "_level")) || 1;
+      document.getElementById(name + "Level").textContent = level;
+      document.getElementById(name + "Img").src = `${name}_lv${level}.png`;
+    });
+  </script>
+
+</body>
+</html>
