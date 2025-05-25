@@ -106,7 +106,13 @@
 <div id="levelUpMessage" style="display:none; font-weight:bold; font-size:20px; margin-top:10px;"></div>
 <div id="rewardMessage" style="display:none; font-size:18px;"></div>
 
-<div id="skillBox" style="display:none; margin-top:12px; padding:10px 18px; background:#fff; color:#8000FF; font-weight:bold; border-radius:12px; width:fit-content; margin-left:auto; margin-right:auto;"></div>
+<div id="skillBox"
+     onclick="showSkillDetail()"
+     style="display:none; margin-top:12px; padding:10px 18px; background:#fff; color:#8000FF; font-weight:bold; border-radius:12px; width:fit-content; margin-left:auto; margin-right:auto; cursor:pointer; box-shadow: 0 0 6px #B266FF, 0 0 12px #8000FF, 0 0 18px #9932CC;">
+</div>
+
+<!-- スキル内容を表示するエリア -->
+<div id="skillDetailMessage" style="display:none; margin-top:10px; font-size:16px; text-align:center; background: rgba(255,255,255,0.9); color: #333; padding: 8px 12px; border-radius: 10px; width: fit-content; margin-left:auto; margin-right:auto;"></div>
 
   <button onclick="giveDrink()">お酒をあげる</button>
   <button onclick="resetProgress()">リセットする</button>
@@ -175,6 +181,20 @@
     expFill.style.width = "0%"
     updateDisplay();
     updateSkillDisplay();
+    function showSkillDetail() {
+const skillDescriptions = ["", "押すたびにら行の言葉を言う", "サブマリンのバック2倍（1回限り）"];
+  if (level >= 2) {
+    const skillText = skillDescriptions[level - 1];
+    const detailBox = document.getElementById("skillDetailMessage");
+    detailBox.innerText = skillText;
+    detailBox.style.display = "block";
+
+    // 3秒後に自動で非表示
+    setTimeout(() => {
+      detailBox.style.display = "none";
+    }, 3000);
+  }
+}
     function showLevelUp(newLevel) {
   const skillNames = ["", "舌足らず", "山中サブマりん"];
   const skillMsg = `RINは【${skillNames[newLevel - 1]}】を覚えた！`;

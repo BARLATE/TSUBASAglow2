@@ -106,7 +106,13 @@
 <div id="levelUpMessage" style="display:none; font-weight:bold; font-size:20px; margin-top:10px;"></div>
 <div id="rewardMessage" style="display:none; font-size:18px;"></div>
 
-<div id="skillBox" style="display:none; margin-top:12px; padding:10px 18px; background:#fff; color:#FF69B4; font-weight:bold; border-radius:12px; width:fit-content; margin-left:auto; margin-right:auto;"></div>
+<div id="skillBox"
+     onclick="showSkillDetail()"
+     style="display:none; margin-top:12px; padding:10px 18px; background:#fff; color:#FF69B4; font-weight:bold; border-radius:12px; width:fit-content; margin-left:auto; margin-right:auto; cursor:pointer; box-shadow: 0 0 6px #FFB6C1, 0 0 12px #FF69B4, 0 0 18px #FF85C1;">
+</div>
+
+<!-- スキル内容を表示するエリア -->
+<div id="skillDetailMessage" style="display:none; margin-top:10px; font-size:16px; text-align:center; background: rgba(255,255,255,0.9); color: #333; padding: 8px 12px; border-radius: 10px; width: fit-content; margin-left:auto; margin-right:auto;"></div>
 
   <button onclick="giveDrink()">お酒をあげる</button>
   <button onclick="resetProgress()">リセットする</button>
@@ -175,6 +181,20 @@
   expFill.style.width = "0%"
   updateDisplay();
   updateSkillDisplay();
+  function showSkillDetail() {
+  const skillDescriptions = ["", "「ちゃんちゃんぱりー」でコールする", "時給200円アップ（1回限り）"];
+  if (level >= 2) {
+    const skillText = skillDescriptions[level - 1];
+    const detailBox = document.getElementById("skillDetailMessage");
+    detailBox.innerText = skillText;
+    detailBox.style.display = "block";
+
+    // 3秒後に自動で非表示
+    setTimeout(() => {
+      detailBox.style.display = "none";
+    }, 3000);
+  }
+}
   function showLevelUp(newLevel) {
   const skillNames = ["", "ちゃんちゃんぱりー", "ゴールドブースト"];
   const skillMsg = `KAEDEは【${skillNames[newLevel - 1]}】を覚えた！`;
