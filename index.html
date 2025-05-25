@@ -63,6 +63,21 @@
       width: 90%;
       max-width: 360px;
     }
+    .exp-bar {
+  width: 90%;
+  max-width: 360px;
+  height: 20px;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 10px auto;
+}
+.exp-fill {
+  height: 100%;
+  background: #FF4444; /* 黄色っぽい。キャラごとに変更可 */
+  width: 0%;
+  transition: width 0.3s ease;
+}
   </style>
 </head>
 <body>
@@ -83,7 +98,11 @@
   <div class="message" id="message">「お酒強くなりたい、、！」</div>
   <div class="level-info" id="levelInfo">レベル: 1（経験値: 0/20）</div>
   <div class="status" id="status">攻撃力: 500 / 防御力: 500</div>
+  <div class="exp-bar">
+  <div class="exp-fill" id="expFill"></div>
+</div>
   <button onclick="giveDrink()">お酒をあげる</button>
+  <button onclick="resetProgress()">リセットする</button>
 </div>
 
 <script>
@@ -111,6 +130,7 @@
     levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
     status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
   }
+  document.getElementById("expFill").style.width = `${(exp / maxExp) * 100}%`;
 
   function giveDrink() {
     tapAudio.currentTime = 0;
@@ -130,6 +150,17 @@
     localStorage.setItem("tsubasa_exp", exp);
     updateDisplay();
   }
+  
+  function resetProgress() {
+  if (confirm("本当にリセットしますか？")) {
+    localStorage.removeItem("tsubasa_level");
+    localStorage.removeItem("tsubasa_exp");
+    level = 1;
+    exp = 0;
+    updateDisplay();
+    alert("データをリセットしました！");
+  }
+}
 
   window.onload = updateDisplay;
 </script>
