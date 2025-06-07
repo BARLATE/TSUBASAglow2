@@ -109,6 +109,30 @@
       100% { opacity: 0; }
     }
   </style>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript">
+function startQrScanner() {
+  document.getElementById("qr-reader").style.display = "block";
+  const html5QrCode = new Html5Qrcode("qr-reader");
+  html5QrCode.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: 250 },
+    qrCodeMessage => {
+      html5QrCode.stop().then(() => {
+        document.getElementById("qr-reader").style.display = "none";
+        if (qrCodeMessage === "TSUBASA-OK") {
+          giveDrink();
+        } else {
+          alert("このQRコードは無効です");
+        }
+      });
+    },
+    errorMessage => {}
+  ).catch(err => {
+    console.error("QRコードスキャンに失敗:", err);
+  });
+}
+
+</script>
 </head>
 <body>
 
@@ -116,6 +140,7 @@
 <audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
 
 <div class="effect-flash" id="flashEffect"></div>
+<div id="qr-reader" style="width: 300px; margin: auto; display: none;"></div>
 
 <div class="menu">
   <a href="index.html">TSUBASA</a>
@@ -135,7 +160,7 @@
   <div id="rewardMessage" style="display:none; font-size:18px;"></div>
   <div id="skillBox" onclick="showSkillDetail()" style="display:none; margin-top:12px; padding:10px 18px; background:#fff; color:#FF0000; font-weight:bold; border-radius:12px; width:fit-content; margin:auto; cursor:pointer; box-shadow: 0 0 6px #FFAAAA, 0 0 12px #FF0000, 0 0 18px #FF4444;"></div>
   <div id="skillDetailMessage" style="display:none; margin-top:10px; font-size:16px; text-align:center; background: rgba(255,255,255,0.9); color: #333; padding: 8px 12px; border-radius: 10px; width: fit-content; margin:auto;"></div>
-  <button onclick="giveDrink()">お酒をあげる</button>
+  <button onclick="startQrScanner()">お酒をあげる</button>
   <button onclick="resetProgress()">リセットする</button>
 </div>
 
@@ -261,6 +286,29 @@
     updateSkillDisplay();
     document.getElementById("expFill").style.width = `${(exp / maxExp) * 100}%`;
   };
+
+function startQrScanner() {
+  document.getElementById("qr-reader").style.display = "block";
+  const html5QrCode = new Html5Qrcode("qr-reader");
+  html5QrCode.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: 250 },
+    qrCodeMessage => {
+      html5QrCode.stop().then(() => {
+        document.getElementById("qr-reader").style.display = "none";
+        if (qrCodeMessage === "TSUBASA-OK") {
+          giveDrink();
+        } else {
+          alert("このQRコードは無効です");
+        }
+      });
+    },
+    errorMessage => {}
+  ).catch(err => {
+    console.error("QRコードスキャンに失敗:", err);
+  });
+}
+
 </script>
 
 </body>
