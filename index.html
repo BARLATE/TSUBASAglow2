@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -6,133 +7,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Rounded+M+PLUS+1c&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      background: #FF0000;
-      color: #fff;
-      font-family: 'Rounded M PLUS 1c', sans-serif;
-      position: relative;
-      overflow-x: hidden;
-    }
-    .menu {
-      background: #fff;
-      color: #FF0000;
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-      font-weight: bold;
-    }
-    .menu a {
-      text-decoration: none;
-      color: #FF0000;
-      padding: 6px 12px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.8);
-    }
-    .top-section {
-      padding: 20px 10px;
-      text-align: center;
-    }
-    .title {
-      font-size: 32px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .character-img {
-      width: 80vw;
-      max-width: 300px;
-      height: auto;
-      border-radius: 20px;
-      box-shadow: 0 0 12px #fff;
-      transition: transform 0.5s ease;
-    }
-    .message {
-      margin-top: 10px;
-      font-size: 20px;
-    }
-    .level-info, .status {
-      margin-top: 8px;
-      font-size: 18px;
-    }
-    button {
-      margin-top: 15px;
-      padding: 16px 24px;
-      font-size: 20px;
-      font-weight: bold;
-      background-color: #fff;
-      color: #FF0000;
-      border: none;
-      border-radius: 30px;
-      width: 90%;
-      max-width: 360px;
-    }
-    .exp-bar {
-      width: 90%;
-      max-width: 360px;
-      height: 20px;
-      background: #fff;
-      border-radius: 10px;
-      overflow: hidden;
-      margin: 10px auto;
-    }
-    .exp-fill {
-      height: 100%;
-      background: #ff4444;
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-
-    @keyframes levelUpEffect {
-      0% { transform: scale(1); opacity: 1; filter: brightness(1); }
-      30% { transform: scale(1.1); filter: brightness(1.5); }
-      50% { transform: scale(1.2); opacity: 0.8; filter: brightness(2); }
-      100% { transform: scale(1); opacity: 1; filter: brightness(1); }
-    }
-    .level-up-animation {
-      animation: levelUpEffect 1s ease-in-out;
-    }
-
-    .effect-flash {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: white;
-      opacity: 0;
-      z-index: 9999;
-      pointer-events: none;
-    }
-    .flash-on {
-      animation: flashAnim 0.3s ease-out;
-    }
-    @keyframes flashAnim {
-      0% { opacity: 0.8; }
-      100% { opacity: 0; }
-    }
+    body { margin:0; background: #FF0000; color: #fff; font-family: 'Rounded M PLUS 1c', sans-serif; }
+    .menu { background: #fff; color: #FF0000; display: flex; justify-content: space-around; padding: 10px 0; font-weight: bold; }
+    .menu a { text-decoration: none; color: #FF0000; padding: 6px 12px; border-radius: 12px; background: rgba(255,255,255,0.8); }
+    .top-section { padding: 20px 10px; text-align: center; }
+    .title { font-size: 32px; font-weight: bold; margin-bottom: 10px; }
+    .character-img { width: 80vw; max-width: 300px; border-radius: 20px; box-shadow: 0 0 12px #fff; transition: transform 0.5s ease; }
+    .message { margin-top: 10px; font-size: 20px; }
+    .level-info, .status { margin-top: 8px; font-size: 18px; }
+    button { margin-top: 15px; padding: 16px 24px; font-size: 20px; font-weight: bold; background-color: #fff; color: #FF0000; border: none; border-radius: 30px; width: 90%; max-width: 360px; }
+    .exp-bar { width: 90%; max-width: 360px; height: 20px; background: #fff; border-radius: 10px; overflow: hidden; margin: 10px auto; }
+    .exp-fill { height: 100%; background: #ff4444; width: 0%; transition: width 0.3s ease; }
+    @keyframes levelUpEffect { 0% { transform: scale(1); opacity: 1; filter: brightness(1); } 30% { transform: scale(1.1); filter: brightness(1.5); } 50% { transform: scale(1.2); opacity: 0.8; filter: brightness(2); } 100% { transform: scale(1); opacity: 1; filter: brightness(1); } }
+    .level-up-animation { animation: levelUpEffect 1s ease-in-out; }
+    .effect-flash { position: fixed; top:0; left:0; width:100%; height:100%; background:white; opacity:0; z-index: 9999; pointer-events:none; }
+    .flash-on { animation: flashAnim 0.3s ease-out; }
+    @keyframes flashAnim { 0% { opacity:0.8; } 100% { opacity:0; } }
   </style>
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript">
-function startQrScanner() {
-  document.getElementById("qr-reader").style.display = "block";
-  const html5QrCode = new Html5Qrcode("qr-reader");
-  html5QrCode.start(
-    { facingMode: "environment" },
-    { fps: 10, qrbox: 250 },
-    qrCodeMessage => {
-      html5QrCode.stop().then(() => {
-        document.getElementById("qr-reader").style.display = "none";
-        if (qrCodeMessage === "TSUBASA-OK") {
-          giveDrink();
-        } else {
-          alert("このQRコードは無効です");
-        }
-      });
-    },
-    errorMessage => {}
-  ).catch(err => {
-    console.error("QRコードスキャンに失敗:", err);
-  });
-}
-
-</script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
 <body>
 
@@ -153,7 +45,7 @@ function startQrScanner() {
   <div class="title">TSUBASAの育成中！</div>
   <img src="tsubasa_lv1.png" alt="TSUBASA" class="character-img" id="tsubasaImage">
   <div class="message" id="message">「お酒強くなりたい、、！」</div>
-  <div class="level-info" id="levelInfo">レベル: 1（経験値: 0/20）</div>
+  <div class="level-info" id="levelInfo">レベル: 1（経験値: 0/10）</div>
   <div class="status" id="status">攻撃力: 500 / 防御力: 500</div>
   <div class="exp-bar"><div class="exp-fill" id="expFill"></div></div>
   <div id="levelUpMessage" style="display:none; font-weight:bold; font-size:20px; margin-top:10px;"></div>
@@ -165,150 +57,128 @@ function startQrScanner() {
 </div>
 
 <script>
-  let level = parseInt(localStorage.getItem("tsubasa_level")) || 1;
-  let exp = parseInt(localStorage.getItem("tsubasa_exp")) || 0;
-  const maxExp = 20;
+let level = parseInt(localStorage.getItem("tsubasa_level")) || 1;
+let exp = parseInt(localStorage.getItem("tsubasa_exp")) || 0;
+const maxLevel = 10;
+const maxExp = 10;
 
-  const levelInfo = document.getElementById("levelInfo");
-  const image = document.getElementById("tsubasaImage");
-  const message = document.getElementById("message");
-  const status = document.getElementById("status");
-  const tapAudio = document.getElementById("tapSound");
-  const levelUpAudio = document.getElementById("levelUpSound");
+const levelInfo = document.getElementById("levelInfo");
+const image = document.getElementById("tsubasaImage");
+const message = document.getElementById("message");
+const status = document.getElementById("status");
+const tapAudio = document.getElementById("tapSound");
+const levelUpAudio = document.getElementById("levelUpSound");
 
-  const images = ["tsubasa_lv1.png", "tsubasa_lv2.png", "tsubasa_lv3.png"];
-  const messages = [
-    "お酒強くなりたい、、！",
-    "飲みべも歌べも高いぞ🍻！",
-    "潰れると思うやん？潰れんっちゃんね〜！"
-  ];
+const images = ["tsubasa_lv1.png","tsubasa_lv2.png","tsubasa_lv3.png","tsubasa_lv4.png","tsubasa_lv5.png","tsubasa_lv6.png","tsubasa_lv7.png","tsubasa_lv8.png","tsubasa_lv9.png","tsubasa_lv10.png"];
+const messages = ["お酒強くなりたい、、！","飲みべも歌べも高いぞ🍻！","潰れると思うやん？潰れんっちゃんね〜！","今日も潰れない！","まだまだいける！","無限の胃袋！","最強！","酔い覚めた！","リバースしない！","もう敵なし！"];
+const skillNames = ["","","","","直缶","","","","","おかわりの極意"];
+const skillDescriptions = ["","","","","スラットを1缶直缶する。","","","","","押すと経験値が2倍（合計2回まで）"];
+const rewardMsgText = "レベルアップ報酬🙌🏻！チェキor特製ドリンクをプレゼント🎁！";
 
-  function updateDisplay() {
-    image.src = images[level - 1];
-    message.textContent = "「" + messages[level - 1] + "」";
-    levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
-    status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
-  }
+function updateDisplay() {
+  image.src = images[level - 1];
+  message.textContent = "「" + messages[level - 1] + "」";
+  levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
+  status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
+}
 
-  function flashEffect() {
-    const flash = document.getElementById("flashEffect");
-    flash.classList.add("flash-on");
-    setTimeout(() => {
-      flash.classList.remove("flash-on");
-    }, 300);
-  }
+function flashEffect() {
+  const flash = document.getElementById("flashEffect");
+  flash.classList.add("flash-on");
+  setTimeout(() => { flash.classList.remove("flash-on"); }, 300);
+}
 
-  function giveDrink() {
-    tapAudio.currentTime = 0;
-    tapAudio.play();
-    exp++;
-    if (exp >= maxExp) {
-      exp = 0;
-      if (level < 3) {
-        level++;
-        levelUpAudio.currentTime = 0;
-        levelUpAudio.play();
-        levelUpAnimation(level);
-        showLevelUp(level);
-      }
-    }
-    document.getElementById("expFill").style.width = `${(exp / maxExp) * 100}%`;
-    localStorage.setItem("tsubasa_level", level);
-    localStorage.setItem("tsubasa_exp", exp);
-    updateDisplay();
-  }
-
-  function levelUpAnimation(newLevel) {
-    image.classList.remove("level-up-animation");
-    void image.offsetWidth;
-    image.classList.add("level-up-animation");
-    flashEffect();
-    setTimeout(() => {
-      image.src = images[newLevel - 1];
-    }, 500);
-  }
-
-  function resetProgress() {
-    if (confirm("本当にリセットしますか？")) {
-      localStorage.removeItem("tsubasa_level");
-      localStorage.removeItem("tsubasa_exp");
-      level = 1;
-      exp = 0;
-      updateDisplay();
-      alert("データをリセットしました！");
+function giveDrink() {
+  tapAudio.play();
+  exp++;
+  if (exp >= maxExp) {
+    exp = 0;
+    if (level < maxLevel) {
+      level++;
+      levelUpAudio.play();
+      image.classList.remove("level-up-animation");
+      void image.offsetWidth;
+      image.classList.add("level-up-animation");
+      flashEffect();
+      showLevelUp(level);
     }
   }
+  document.getElementById("expFill").style.width = `${(exp / maxExp) * 100}%`;
+  localStorage.setItem("tsubasa_level", level);
+  localStorage.setItem("tsubasa_exp", exp);
+  updateDisplay();
+}
 
-  function showSkillDetail() {
-    const skillDescriptions = ["", "スラットを1缶直缶する。", "押すと経験値が2倍（合計2回まで）"];
-    if (level >= 2) {
-      const skillText = skillDescriptions[level - 1];
-      const detailBox = document.getElementById("skillDetailMessage");
-      detailBox.innerText = skillText;
-      detailBox.style.display = "block";
-      setTimeout(() => {
-        detailBox.style.display = "none";
-      }, 3000);
-    }
+function showLevelUp(newLevel) {
+  let skillMsg = "";
+  let showReward = false;
+  if (newLevel === 5 || newLevel === 10) {
+    skillMsg = `TSUBASAは【${skillNames[newLevel - 1]}】を覚えた！`;
+    showReward = true;
+  } else {
+    skillMsg = `TSUBASAはレベルアップした！`;
   }
-
-  function showLevelUp(newLevel) {
-    const skillNames = ["", "直缶", "おかわりの極意"];
-    const skillMsg = `TSUBASAは【${skillNames[newLevel - 1]}】を覚えた！`;
-    const rewardMsg = `レベルアップ報酬🙌🏻！チェキor特製ドリンクをプレゼント🎁！`;
-
-    document.getElementById('levelUpMessage').innerText = skillMsg;
-    document.getElementById('rewardMessage').innerText = rewardMsg;
-    document.getElementById('levelUpMessage').style.display = 'block';
-    document.getElementById('rewardMessage').style.display = 'block';
-
-    setTimeout(() => {
-      document.getElementById('levelUpMessage').style.display = 'none';
-      document.getElementById('rewardMessage').style.display = 'none';
-      updateSkillDisplay();
-    }, 10000);
-  }
-
-  function updateSkillDisplay() {
-    const skillNames = ["", "直缶", "おかわりの極意"];
-    if (level >= 2) {
-      const skillText = `スキル：${skillNames[level - 1]}`;
-      const skillBox = document.getElementById('skillBox');
-      skillBox.textContent = skillText;
-      skillBox.style.display = 'block';
-    } else {
-      document.getElementById('skillBox').style.display = 'none';
-    }
-  }
-
-  window.onload = () => {
-    updateDisplay();
+  document.getElementById('levelUpMessage').innerText = skillMsg;
+  document.getElementById('rewardMessage').innerText = showReward ? rewardMsgText : "";
+  document.getElementById('levelUpMessage').style.display = 'block';
+  if (showReward) document.getElementById('rewardMessage').style.display = 'block';
+  setTimeout(() => {
+    document.getElementById('levelUpMessage').style.display = 'none';
+    document.getElementById('rewardMessage').style.display = 'none';
     updateSkillDisplay();
-    document.getElementById("expFill").style.width = `${(exp / maxExp) * 100}%`;
-  };
+  }, 8000);
+}
+
+function showSkillDetail() {
+  const lv = level - 1;
+  if (level === 5 || level === 10) {
+    const detailBox = document.getElementById("skillDetailMessage");
+    detailBox.innerText = skillDescriptions[lv];
+    detailBox.style.display = "block";
+    setTimeout(() => { detailBox.style.display = "none"; }, 3000);
+  }
+}
+
+function updateSkillDisplay() {
+  const lv = level - 1;
+  const skillBox = document.getElementById('skillBox');
+  if (level === 5 || level === 10) {
+    skillBox.textContent = `スキル：${skillNames[lv]}`;
+    skillBox.style.display = 'block';
+  } else {
+    skillBox.style.display = 'none';
+  }
+}
+
+function resetProgress() {
+  if (confirm("本当にリセットしますか？")) {
+    localStorage.removeItem("tsubasa_level");
+    localStorage.removeItem("tsubasa_exp");
+    level = 1; exp = 0;
+    updateDisplay(); updateSkillDisplay();
+    document.getElementById("expFill").style.width = "0%";
+  }
+}
 
 function startQrScanner() {
   document.getElementById("qr-reader").style.display = "block";
   const html5QrCode = new Html5Qrcode("qr-reader");
   html5QrCode.start(
-    { facingMode: "environment" },
-    { fps: 10, qrbox: 250 },
+    { facingMode: "environment" }, { fps: 10, qrbox: 250 },
     qrCodeMessage => {
       html5QrCode.stop().then(() => {
         document.getElementById("qr-reader").style.display = "none";
-        if (qrCodeMessage === "TSUBASA-OK") {
-          giveDrink();
-        } else {
-          alert("このQRコードは無効です");
-        }
+        if (qrCodeMessage === "TSUBASA-OK") { giveDrink(); }
+        else { alert("このQRコードは無効です"); }
       });
-    },
-    errorMessage => {}
-  ).catch(err => {
-    console.error("QRコードスキャンに失敗:", err);
-  });
+    }, errorMessage => {}
+  ).catch(err => { console.error("QRコードスキャンに失敗:", err); });
 }
 
+window.onload = () => {
+  updateDisplay(); updateSkillDisplay();
+  document.getElementById("expFill").style.width = `${(exp / maxExp) * 100}%`;
+};
 </script>
 
 </body>
