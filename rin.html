@@ -169,7 +169,7 @@ function startQrScanner() {
 <script>
   let level = parseInt(localStorage.getItem("rin_level")) || 1;
   let exp = parseInt(localStorage.getItem("rin_exp")) || 0;
-  const maxExp = 20;
+  const maxExp = 10;
 
   const levelInfo = document.getElementById("levelInfo");
   const image = document.getElementById("rinImage");
@@ -178,11 +178,9 @@ function startQrScanner() {
   const tapAudio = document.getElementById("tapSound");
   const levelUpAudio = document.getElementById("levelUpSound");
 
-  const images = ["rin_lv1.png", "rin_lv2.png", "rin_lv3.png"];
+  const images = ["rin_lv1.png","rin_lv2.png","rin_lv3.png","rin_lv4.png","rin_lv5.png","rin_lv6.png","rin_lv7.png","rin_lv8.png","rin_lv9.png","rin_lv10.png"];
   const messages = [
-    "さあ、飲ませなさい⚛️",
-    "まだおげ飲めぐよ〜〜",
-    "おげにえごがってもいいよ？"
+    "さあ、飲ませなさい⚛️","まだおげ飲めぐよ〜〜","おげにえごがってもいいよ？","もっと飲める！","限界突破！","無限酒豪！","最強の舌足らず！","酔わないよ！","次の日も元気！","酒の女神！"
   ];
 
   function updateDisplay() {
@@ -244,8 +242,8 @@ function startQrScanner() {
   }
 
   function showSkillDetail() {
-    const skillDescriptions = ["", "押すたびにら行の言葉を言う", "サブマリンのバック2倍（1回限り）"];
-    if (level >= 2) {
+    const skillDescriptions = ["","","","","押すたびにら行の言葉を言う","","","","","サブマリンのバック2倍（1回限り）"];
+    if (level === 5 || level === 10) {
       const skillText = skillDescriptions[level - 1];
       const detailBox = document.getElementById("skillDetailMessage");
       detailBox.innerText = skillText;
@@ -257,7 +255,7 @@ function startQrScanner() {
   }
 
   function showLevelUp(newLevel) {
-    const skillNames = ["", "舌足らず", "山中サブマりん"];
+    const skillNames = ["","","","","舌足らず","","","","","山中サブマりん"];
     const skillMsg = `RINは【${skillNames[newLevel - 1]}】を覚えた！`;
     const rewardMsg = `レベルアップ報酬🙌🏻！チェキor特製ドリンクをプレゼント🎁！`;
 
@@ -274,8 +272,8 @@ function startQrScanner() {
   }
 
   function updateSkillDisplay() {
-    const skillNames = ["", "舌足らず", "山中サブマりん"];
-    if (level >= 2) {
+    const skillNames = ["","","","","舌足らず","","","","","山中サブマりん"];
+    if (level === 5 || level === 10) {
       const skillText = `スキル：${skillNames[level - 1]}`;
       const skillBox = document.getElementById('skillBox');
       skillBox.textContent = skillText;
