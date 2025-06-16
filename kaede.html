@@ -167,7 +167,7 @@ function startQrScanner() {
 <script>
   let level = parseInt(localStorage.getItem("kaede_level")) || 1;
   let exp = parseInt(localStorage.getItem("kaede_exp")) || 0;
-  const maxExp = 20;
+  const maxExp = 10;
 
   const levelInfo = document.getElementById("levelInfo");
   const image = document.getElementById("kaedeImage");
@@ -176,11 +176,9 @@ function startQrScanner() {
   const tapAudio = document.getElementById("tapSound");
   const levelUpAudio = document.getElementById("levelUpSound");
 
-  const images = ["kaede_lv1.png", "kaede_lv2.png", "kaede_lv3.png"];
+  const images = ["kaede_lv1.png","kaede_lv2.png","kaede_lv3.png","kaede_lv4.png","kaede_lv5.png","kaede_lv6.png","kaede_lv7.png","kaede_lv8.png","kaede_lv9.png","kaede_lv10.png"];
   const messages = [
-    "ちゃんちゃんぱりー",
-    "皆の10分の1くらいは飲めるようになった(？)",
-    "ノンアルでください🍺"
+    "ちゃんちゃんぱりー","皆の10分の1くらいは飲めるようになった(？)","ノンアルでください🍺","まだまだ飲める！","限界突破！","ノンアル最強！","酔わないカエデ！","歌も飲みも最強！","酔い覚めた！","お酒のプリンセス！"
   ];
 
   function updateDisplay() {
@@ -242,8 +240,8 @@ function startQrScanner() {
   }
 
   function showSkillDetail() {
-    const skillDescriptions = ["", "「ちゃんちゃんぱりー」でコールする", "時給200円アップ（1回限り）"];
-    if (level >= 2) {
+    const skillDescriptions = ["","","","","「ちゃんちゃんぱりー」でコールする","","","","","時給200円アップ（1回限り）"];
+    if (level === 5 || level === 10) {
       const skillText = skillDescriptions[level - 1];
       const detailBox = document.getElementById("skillDetailMessage");
       detailBox.innerText = skillText;
@@ -255,7 +253,7 @@ function startQrScanner() {
   }
 
   function showLevelUp(newLevel) {
-    const skillNames = ["", "ちゃんちゃんぱりー", "ゴールドブースト"];
+    const skillNames = ["","","","","ちゃんちゃんぱりー","","","","","ゴールドブースト"];
     const skillMsg = `KAEDEは【${skillNames[newLevel - 1]}】を覚えた！`;
     const rewardMsg = `レベルアップ報酬🙌🏻！チェキor特製ドリンクをプレゼント🎁！`;
     document.getElementById('levelUpMessage').innerText = skillMsg;
@@ -270,8 +268,8 @@ function startQrScanner() {
   }
 
   function updateSkillDisplay() {
-    const skillNames = ["", "ちゃんちゃんぱりー", "ゴールドブースト"];
-    if (level >= 2) {
+    const skillNames = ["","","","","ちゃんちゃんぱりー","","","","","ゴールドブースト"];
+    if (level === 5 || level === 10) {
       const skillText = `スキル：${skillNames[level - 1]}`;
       const skillBox = document.getElementById('skillBox');
       skillBox.textContent = skillText;
