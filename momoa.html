@@ -167,7 +167,7 @@ function startQrScanner() {
 <script>
   let level = parseInt(localStorage.getItem("momoa_level")) || 1;
   let exp = parseInt(localStorage.getItem("momoa_exp")) || 0;
-  const maxExp = 20;
+  const maxExp = 10;
 
   const levelInfo = document.getElementById("levelInfo");
   const image = document.getElementById("momoaImage");
@@ -176,11 +176,9 @@ function startQrScanner() {
   const tapAudio = document.getElementById("tapSound");
   const levelUpAudio = document.getElementById("levelUpSound");
 
-  const images = ["momoa_lv1.png", "momoa_lv2.png", "momoa_lv3.png.jpg"];
+  const images = ["momoa_lv1.png","momoa_lv2.png","momoa_lv3.png","momoa_lv4.png","momoa_lv5.png","momoa_lv6.png","momoa_lv7.png","momoa_lv8.png","momoa_lv9.png","momoa_lv10.png"];
   const messages = [
-    "お酒好き！！💛",
-    "飲みたい歌いたい！！🍻",
-    "まだまだ頑張るよーー🔥"
+    "お酒好き！！💛","飲みたい歌いたい！！🍻","まだまだ頑張るよーー🔥","もっと飲める！","更に飲める！","無限酒パワー！","最強酒豪！","酔い覚めた！","二日酔いしない！","お酒の神様！"
   ];
 
   function updateDisplay() {
@@ -242,8 +240,8 @@ function startQrScanner() {
   }
 
   function showSkillDetail() {
-    const skillDescriptions = ["", "メガキャスドリ1杯飲む（ストローで）", "時給100円アップ（1回限り）"];
-    if (level >= 2) {
+    const skillDescriptions = ["","","","","メガキャスドリ1杯飲む（ストローで）","","","","","時給100円アップ（1回限り）"];
+    if (level === 5 || level === 10) {
       const skillText = skillDescriptions[level - 1];
       const detailBox = document.getElementById("skillDetailMessage");
       detailBox.innerText = skillText;
@@ -255,7 +253,7 @@ function startQrScanner() {
   }
 
   function showLevelUp(newLevel) {
-    const skillNames = ["", "生粋の酒好き", "ゴールド"];
+    const skillNames = ["","","","","生粋の酒好き","","","","","ゴールド"];
     const skillMsg = `MOMOAは【${skillNames[newLevel - 1]}】を覚えた！`;
     const rewardMsg = `レベルアップ報酬🙌🏻！チェキor特製ドリンクをプレゼント🎁！`;
 
@@ -272,8 +270,8 @@ function startQrScanner() {
   }
 
   function updateSkillDisplay() {
-    const skillNames = ["", "生粋の酒好き", "ゴールド"];
-    if (level >= 2) {
+    const skillNames = ["","","","","生粋の酒好き","","","","","ゴールド"];
+    if (level === 5 || level === 10) {
       const skillText = `スキル：${skillNames[level - 1]}`;
       const skillBox = document.getElementById('skillBox');
       skillBox.textContent = skillText;
