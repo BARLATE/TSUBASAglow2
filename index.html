@@ -24,145 +24,12 @@
     .flash-on { animation: flashAnim 0.3s ease-out; }
     @keyframes flashAnim { 0% { opacity:0.8; } 100% { opacity:0; } }
   </style>
-  <script src="https://unpkg.com/html5-qrcode">
-// Fireworks functions
-let fireworksInstance = null;
-
-function launchNormalFireworks(charName) {
-  const container = document.getElementById("fireworkContainer");
-  const characterColors = {
-    TSUBASA: "#ff4444"
-  };
-  const color = characterColors[charName] || "#ffffff";
-  if (fireworksInstance) fireworksInstance.stop();
-  fireworksInstance = new Fireworks(container, {
-    hue: { min: 0, max: 360 },
-    delay: { min: 15, max: 30 },
-    rocketsPoint: 50,
-    speed: 3,
-    acceleration: 1.03,
-    friction: 0.95,
-    gravity: 1.4,
-    particles: 60,
-    trace: 3,
-    explosion: 5,
-    brightness: { min: 50, max: 80 },
-    boundaries: {
-      top: 0,
-      bottom: container.clientHeight,
-      left: 0,
-      right: container.clientWidth
-    },
-    sound: { enabled: false },
-    color: color
-  });
-  fireworksInstance.start();
-  setTimeout(() => fireworksInstance.stop(), 2500);
-}
-
-function launchLevelUpFireworks() {
-  const container = document.getElementById("fireworkContainer");
-  if (fireworksInstance) fireworksInstance.stop();
-  fireworksInstance = new Fireworks(container, {
-    hue: { min: 45, max: 55 },
-    delay: { min: 5, max: 15 },
-    rocketsPoint: 50,
-    speed: 4,
-    acceleration: 1.08,
-    friction: 0.93,
-    gravity: 1.3,
-    particles: 120,
-    trace: 6,
-    explosion: 8,
-    brightness: { min: 70, max: 100 },
-    boundaries: {
-      top: 0,
-      bottom: container.clientHeight,
-      left: 0,
-      right: container.clientWidth
-    },
-    sound: { enabled: false }
-  });
-  fireworksInstance.start();
-  setTimeout(() => fireworksInstance.stop(), 4000);
-}
-
-</script>
-
-<!-- Fireworks.js CDN -->
-<script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.1.0/dist/fireworks.js">
-// Fireworks functions
-let fireworksInstance = null;
-
-function launchNormalFireworks(charName) {
-  const container = document.getElementById("fireworkContainer");
-  const characterColors = {
-    TSUBASA: "#ff4444"
-  };
-  const color = characterColors[charName] || "#ffffff";
-  if (fireworksInstance) fireworksInstance.stop();
-  fireworksInstance = new Fireworks(container, {
-    hue: { min: 0, max: 360 },
-    delay: { min: 15, max: 30 },
-    rocketsPoint: 50,
-    speed: 3,
-    acceleration: 1.03,
-    friction: 0.95,
-    gravity: 1.4,
-    particles: 60,
-    trace: 3,
-    explosion: 5,
-    brightness: { min: 50, max: 80 },
-    boundaries: {
-      top: 0,
-      bottom: container.clientHeight,
-      left: 0,
-      right: container.clientWidth
-    },
-    sound: { enabled: false },
-    color: color
-  });
-  fireworksInstance.start();
-  setTimeout(() => fireworksInstance.stop(), 2500);
-}
-
-function launchLevelUpFireworks() {
-  const container = document.getElementById("fireworkContainer");
-  if (fireworksInstance) fireworksInstance.stop();
-  fireworksInstance = new Fireworks(container, {
-    hue: { min: 45, max: 55 },
-    delay: { min: 5, max: 15 },
-    rocketsPoint: 50,
-    speed: 4,
-    acceleration: 1.08,
-    friction: 0.93,
-    gravity: 1.3,
-    particles: 120,
-    trace: 6,
-    explosion: 8,
-    brightness: { min: 70, max: 100 },
-    boundaries: {
-      top: 0,
-      bottom: container.clientHeight,
-      left: 0,
-      right: container.clientWidth
-    },
-    sound: { enabled: false }
-  });
-  fireworksInstance.start();
-  setTimeout(() => fireworksInstance.stop(), 4000);
-}
-
-</script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
 <body>
 
 <audio id="tapSound" src="tap.mp3" preload="auto"></audio>
 <audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
-
-
-<!-- Fireworks Container -->
-<div id="fireworkContainer" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:998;"></div>
 
 <div class="effect-flash" id="flashEffect"></div>
 <div id="qr-reader" style="width: 300px; margin: auto; display: none;"></div>
@@ -223,14 +90,12 @@ function flashEffect() {
 
 function giveDrink() {
   tapAudio.play();
-  launchNormalFireworks("TSUBASA");
   exp++;
   if (exp >= maxExp) {
     exp = 0;
     if (level < maxLevel) {
       level++;
       levelUpAudio.play();
-      launchLevelUpFireworks();
       image.classList.remove("level-up-animation");
       void image.offsetWidth;
       image.classList.add("level-up-animation");
@@ -314,69 +179,6 @@ window.onload = () => {
   updateDisplay(); updateSkillDisplay();
   document.getElementById("expFill").style.width = `${(exp / maxExp) * 100}%`;
 };
-
-// Fireworks functions
-let fireworksInstance = null;
-
-function launchNormalFireworks(charName) {
-  const container = document.getElementById("fireworkContainer");
-  const characterColors = {
-    TSUBASA: "#ff4444"
-  };
-  const color = characterColors[charName] || "#ffffff";
-  if (fireworksInstance) fireworksInstance.stop();
-  fireworksInstance = new Fireworks(container, {
-    hue: { min: 0, max: 360 },
-    delay: { min: 15, max: 30 },
-    rocketsPoint: 50,
-    speed: 3,
-    acceleration: 1.03,
-    friction: 0.95,
-    gravity: 1.4,
-    particles: 60,
-    trace: 3,
-    explosion: 5,
-    brightness: { min: 50, max: 80 },
-    boundaries: {
-      top: 0,
-      bottom: container.clientHeight,
-      left: 0,
-      right: container.clientWidth
-    },
-    sound: { enabled: false },
-    color: color
-  });
-  fireworksInstance.start();
-  setTimeout(() => fireworksInstance.stop(), 2500);
-}
-
-function launchLevelUpFireworks() {
-  const container = document.getElementById("fireworkContainer");
-  if (fireworksInstance) fireworksInstance.stop();
-  fireworksInstance = new Fireworks(container, {
-    hue: { min: 45, max: 55 },
-    delay: { min: 5, max: 15 },
-    rocketsPoint: 50,
-    speed: 4,
-    acceleration: 1.08,
-    friction: 0.93,
-    gravity: 1.3,
-    particles: 120,
-    trace: 6,
-    explosion: 8,
-    brightness: { min: 70, max: 100 },
-    boundaries: {
-      top: 0,
-      bottom: container.clientHeight,
-      left: 0,
-      right: container.clientWidth
-    },
-    sound: { enabled: false }
-  });
-  fireworksInstance.start();
-  setTimeout(() => fireworksInstance.stop(), 4000);
-}
-
 </script>
 
 </body>

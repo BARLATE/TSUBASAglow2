@@ -130,112 +130,12 @@ function startQrScanner() {
   });
 }
 
-
-function launchNormalFireworks() {
-  const container = document.getElementById("fireworkContainer");
-  if (window.fireworksInstance) window.fireworksInstance.stop();
-  window.fireworksInstance = new Fireworks(container, {
-    hue: { min: 330, max: 360 },
-    delay: { min: 15, max: 30 },
-    rocketsPoint: 50,
-    speed: 3,
-    acceleration: 1.03,
-    friction: 0.95,
-    gravity: 1.4,
-    particles: 60,
-    trace: 3,
-    explosion: 5,
-    lineStyle: "round",
-    brightness: { min: 50, max: 80 },
-    boundaries: { top: 0, bottom: container.clientHeight, left: 0, right: container.clientWidth },
-    sound: { enabled: false },
-    color: "#FF69B4"
-  });
-  window.fireworksInstance.start();
-  setTimeout(() => window.fireworksInstance.stop(), 2500);
-}
-
-function launchLevelUpFireworks() {
-  const container = document.getElementById("fireworkContainer");
-  if (window.fireworksInstance) window.fireworksInstance.stop();
-  window.fireworksInstance = new Fireworks(container, {
-    hue: { min: 320, max: 360 },
-    delay: { min: 5, max: 15 },
-    rocketsPoint: 50,
-    speed: 4,
-    acceleration: 1.08,
-    friction: 0.93,
-    gravity: 1.3,
-    particles: 120,
-    trace: 6,
-    explosion: 8,
-    lineStyle: "round",
-    brightness: { min: 70, max: 100 },
-    boundaries: { top: 0, bottom: container.clientHeight, left: 0, right: container.clientWidth },
-    sound: { enabled: false }
-  });
-  window.fireworksInstance.start();
-  setTimeout(() => window.fireworksInstance.stop(), 4000);
-}
-
-</script>
-
-  <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.1.0/dist/fireworks.js">
-function launchNormalFireworks() {
-  const container = document.getElementById("fireworkContainer");
-  if (window.fireworksInstance) window.fireworksInstance.stop();
-  window.fireworksInstance = new Fireworks(container, {
-    hue: { min: 330, max: 360 },
-    delay: { min: 15, max: 30 },
-    rocketsPoint: 50,
-    speed: 3,
-    acceleration: 1.03,
-    friction: 0.95,
-    gravity: 1.4,
-    particles: 60,
-    trace: 3,
-    explosion: 5,
-    lineStyle: "round",
-    brightness: { min: 50, max: 80 },
-    boundaries: { top: 0, bottom: container.clientHeight, left: 0, right: container.clientWidth },
-    sound: { enabled: false },
-    color: "#FF69B4"
-  });
-  window.fireworksInstance.start();
-  setTimeout(() => window.fireworksInstance.stop(), 2500);
-}
-
-function launchLevelUpFireworks() {
-  const container = document.getElementById("fireworkContainer");
-  if (window.fireworksInstance) window.fireworksInstance.stop();
-  window.fireworksInstance = new Fireworks(container, {
-    hue: { min: 320, max: 360 },
-    delay: { min: 5, max: 15 },
-    rocketsPoint: 50,
-    speed: 4,
-    acceleration: 1.08,
-    friction: 0.93,
-    gravity: 1.3,
-    particles: 120,
-    trace: 6,
-    explosion: 8,
-    lineStyle: "round",
-    brightness: { min: 70, max: 100 },
-    boundaries: { top: 0, bottom: container.clientHeight, left: 0, right: container.clientWidth },
-    sound: { enabled: false }
-  });
-  window.fireworksInstance.start();
-  setTimeout(() => window.fireworksInstance.stop(), 4000);
-}
-
 </script>
 </head>
 <body>
 
 <audio id="tapSound" src="tap.mp3" preload="auto"></audio>
 <audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
-
-<div id="fireworkContainer" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;"></div>
 <div class="effect-flash" id="flashEffect"></div>
 <div id="qr-reader" style="width: 300px; margin: auto; display: none;"></div>
 
@@ -276,7 +176,7 @@ function launchLevelUpFireworks() {
   const tapAudio = document.getElementById("tapSound");
   const levelUpAudio = document.getElementById("levelUpSound");
 
-  const images = ["kaede_lv1.png","kaede_lv2.png.PNG","kaede_lv3.png","kaede_lv4.png","kaede_lv5.png","kaede_lv6.png","kaede_lv7.png","kaede_lv8.png","kaede_lv9.png","kaede_lv10.png"];
+  const images = ["kaede_lv1.png","kaede_lv2.png","kaede_lv3.png","kaede_lv4.png","kaede_lv5.png","kaede_lv6.png","kaede_lv7.png","kaede_lv8.png","kaede_lv9.png","kaede_lv10.png"];
   const messages = [
     "ちゃんちゃんぱりー","皆の10分の1くらいは飲めるようになった(？)","ノンアルでください🍺","まだまだ飲める！","限界突破！","ノンアル最強！","酔わないカエデ！","歌も飲みも最強！","酔い覚めた！","お酒のプリンセス！"
   ];
@@ -309,7 +209,6 @@ function launchLevelUpFireworks() {
   function giveDrink() {
     tapAudio.currentTime = 0;
     tapAudio.play();
-    launchNormalFireworks();
 
     exp++;
     if (exp >= maxExp) {
@@ -318,7 +217,6 @@ function launchLevelUpFireworks() {
         level++;
         levelUpAudio.currentTime = 0;
         levelUpAudio.play();
-        launchLevelUpFireworks();
         levelUpAnimation(level);
         showLevelUp(level);
       }
@@ -407,54 +305,6 @@ function startQrScanner() {
   ).catch(err => {
     console.error("QRコードスキャンに失敗:", err);
   });
-}
-
-
-function launchNormalFireworks() {
-  const container = document.getElementById("fireworkContainer");
-  if (window.fireworksInstance) window.fireworksInstance.stop();
-  window.fireworksInstance = new Fireworks(container, {
-    hue: { min: 330, max: 360 },
-    delay: { min: 15, max: 30 },
-    rocketsPoint: 50,
-    speed: 3,
-    acceleration: 1.03,
-    friction: 0.95,
-    gravity: 1.4,
-    particles: 60,
-    trace: 3,
-    explosion: 5,
-    lineStyle: "round",
-    brightness: { min: 50, max: 80 },
-    boundaries: { top: 0, bottom: container.clientHeight, left: 0, right: container.clientWidth },
-    sound: { enabled: false },
-    color: "#FF69B4"
-  });
-  window.fireworksInstance.start();
-  setTimeout(() => window.fireworksInstance.stop(), 2500);
-}
-
-function launchLevelUpFireworks() {
-  const container = document.getElementById("fireworkContainer");
-  if (window.fireworksInstance) window.fireworksInstance.stop();
-  window.fireworksInstance = new Fireworks(container, {
-    hue: { min: 320, max: 360 },
-    delay: { min: 5, max: 15 },
-    rocketsPoint: 50,
-    speed: 4,
-    acceleration: 1.08,
-    friction: 0.93,
-    gravity: 1.3,
-    particles: 120,
-    trace: 6,
-    explosion: 8,
-    lineStyle: "round",
-    brightness: { min: 70, max: 100 },
-    boundaries: { top: 0, bottom: container.clientHeight, left: 0, right: container.clientWidth },
-    sound: { enabled: false }
-  });
-  window.fireworksInstance.start();
-  setTimeout(() => window.fireworksInstance.stop(), 4000);
 }
 
 </script>
