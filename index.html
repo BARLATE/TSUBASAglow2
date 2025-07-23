@@ -168,8 +168,9 @@ function startQrScanner() {
     qrCodeMessage => {
       html5QrCode.stop().then(() => {
         document.getElementById("qr-reader").style.display = "none";
-        if (qrCodeMessage === "TSUBASA-OK") { giveDrink(); }
-        else { alert("このQRコードは無効です"); }
+        if (qrCodeMessage === "TSUBASA-OK") { giveDrink(); 
+        } , 200); 
+      }  else { alert("このQRコードは無効です"); }
       });
     }, errorMessage => {}
   ).catch(err => { console.error("QRコードスキャンに失敗:", err); });
