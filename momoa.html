@@ -6,47 +6,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Rounded+M+PLUS+1c&display=swap" rel="stylesheet">
   <style>
-    /* 省略：CSS部分は元と同じなのでここではカットしてもOK */
+    body { margin: 0; background: #FFD700; color: #fff; font-family: 'Rounded M PLUS 1c', sans-serif; position: relative; overflow-x: hidden; }
+    .menu { background: #fff; color: #FFD700; display: flex; justify-content: space-around; padding: 10px 0; font-weight: bold; }
+    .menu a { text-decoration: none; color: #FFD700; padding: 6px 12px; border-radius: 12px; background: rgba(255,255,255,0.8); }
+    .top-section { padding: 20px 10px; text-align: center; }
+    .title { font-size: 32px; font-weight: bold; margin-bottom: 10px; }
+    .character-img { width: 80vw; max-width: 300px; height: auto; border-radius: 20px; box-shadow: 0 0 12px #fff; transition: transform 0.5s ease; }
+    .message { margin-top: 10px; font-size: 20px; }
+    .level-info, .status { margin-top: 8px; font-size: 18px; }
+    button { margin-top: 15px; padding: 16px 24px; font-size: 20px; font-weight: bold; background-color: #fff; color: #FFD700; border: none; border-radius: 30px; width: 90%; max-width: 360px; }
+    .exp-bar { width: 90%; max-width: 360px; height: 20px; background: #fff; border-radius: 10px; overflow: hidden; margin: 10px auto; }
+    .exp-fill { height: 100%; background: #fff176; width: 0%; transition: width 0.3s ease; }
+    .effect-flash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; z-index: 9999; pointer-events: none; }
+    .flash-on { animation: flashAnim 0.3s ease-out; }
+    @keyframes flashAnim { 0% { opacity: 0.8; } 100% { opacity: 0; } }
   </style>
-
-  <!-- Fireworks.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.1.0/dist/fireworks.js"></script>
-
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 </head>
 <body>
 
 <audio id="tapSound" src="tap.mp3" preload="auto"></audio>
 <audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
 
-<!-- Fireworks Container -->
 <div id="fireworkContainer" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;"></div>
 <div class="effect-flash" id="flashEffect"></div>
-<div id="qr-reader" style="width: 300px; margin: auto; display: none;"></div>
 
-<!-- 以下：UI表示（タイトル・キャラ画像・ステータスなど） -->
-<!-- 省略：HTML構造はそのまま維持 -->
+<div class="menu">
+  <a href="index.html">TSUBASA</a>
+  <a href="kaede.html">KAEDE</a>
+  <a href="momoa.html">MOMOA</a>
+  <a href="rin.html">RIN</a>
+</div>
+
+<div class="top-section">
+  <div class="title">MOMOAの育成中！</div>
+  <img src="momoa_lv1.png" alt="MOMOA" class="character-img" id="momoaImage">
+  <div class="message" id="message">「お酒好き！！💛」</div>
+  <div class="level-info" id="levelInfo">レベル: 1（経験値: 0/10）</div>
+  <div class="status" id="status">攻撃力: 500 / 防御力: 500</div>
+  <div class="exp-bar"><div class="exp-fill" id="expFill"></div></div>
+  <button onclick="giveDrink()">お酒をあげる</button>
+</div>
 
 <script>
-  // ...元のロジックの上に以下を追加...
+  let level = parseInt(localStorage.getItem("momoa_level")) || 1;
+  let exp = parseInt(localStorage.getItem("momoa_exp")) || 0;
+  const maxExp = 10;
 
-  // Fireworks setup
-  let fireworksInstance = null;
+  const messages = [
+    "お酒好き！！💛",
+    "飲みたい歌いたい！！🍻",
+    "まだまだ頑張るよーー🔥"
+  ];
+  const images = [
+    "momoa_lv1.png",
+    "momoa_lv2.png",
+    "momoa_lv3.png"
+  ];
 
-  function launchNormalFireworks(charName) {
+  function updateDisplay() {
+    document.getElementById("momoaImage").src = images[level - 1];
+    document.getElementById("message").textContent = "「" + messages[level - 1] + "」";
+    document.getElementById("levelInfo").textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
+    document.getElementById("status").textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
+    document.getElementById("expFill").style.width = `${(exp / maxExp) * 100}%`;
+  }
+
+  function flashEffect() {
+    const flash = document.getElementById("flashEffect");
+    flash.classList.add("flash-on");
+    setTimeout(() => flash.classList.remove("flash-on"), 300);
+  }
+
+  function launchNormalFireworks() {
     const container = document.getElementById("fireworkContainer");
-    const characterColors = {
-      TSUBASA: "#ff4444",
-      KAEDE: "#ff99cc",
-      MOMOA: "#ffcc00",
-      RIN: "#aa88ff"
-    };
-    const color = characterColors[charName] || "#ffffff";
-    if (fireworksInstance) fireworksInstance.stop();
-    fireworksInstance = new Fireworks(container, {
-      hue: { min: 0, max: 360 },
-      delay: { min: 15, max: 30 },
-      rocketsPoint: 50,
+    if (window.fireworksInstance) window.fireworksInstance.stop();
+    window.fireworksInstance = new Fireworks(container, {
+      color: "#ffcc00",
+      hue: { min: 50, max: 60 },
       speed: 3,
       acceleration: 1.03,
       friction: 0.95,
@@ -56,20 +93,18 @@
       explosion: 5,
       brightness: { min: 50, max: 80 },
       boundaries: { top: 0, bottom: container.clientHeight, left: 0, right: container.clientWidth },
-      sound: { enabled: false },
-      color: color
+      sound: { enabled: false }
     });
-    fireworksInstance.start();
-    setTimeout(() => fireworksInstance.stop(), 2500);
+    window.fireworksInstance.start();
+    setTimeout(() => window.fireworksInstance.stop(), 2500);
   }
 
   function launchLevelUpFireworks() {
     const container = document.getElementById("fireworkContainer");
-    if (fireworksInstance) fireworksInstance.stop();
-    fireworksInstance = new Fireworks(container, {
+    if (window.fireworksInstance) window.fireworksInstance.stop();
+    window.fireworksInstance = new Fireworks(container, {
       hue: { min: 45, max: 55 },
       delay: { min: 5, max: 15 },
-      rocketsPoint: 50,
       speed: 4,
       acceleration: 1.08,
       friction: 0.93,
@@ -81,18 +116,31 @@
       boundaries: { top: 0, bottom: container.clientHeight, left: 0, right: container.clientWidth },
       sound: { enabled: false }
     });
-    fireworksInstance.start();
-    setTimeout(() => fireworksInstance.stop(), 4000);
+    window.fireworksInstance.start();
+    setTimeout(() => window.fireworksInstance.stop(), 4000);
   }
 
-  // ...giveDrink() の中に以下追加済み...
-  // tapAudio.play();
-  // launchNormalFireworks("MOMOA");
+  function giveDrink() {
+    document.getElementById("tapSound").play();
+    launchNormalFireworks();
+    exp++;
+    if (exp >= maxExp) {
+      exp = 0;
+      if (level < 3) {
+        level++;
+        document.getElementById("levelUpSound").play();
+        launchLevelUpFireworks();
+        flashEffect();
+      }
+    }
+    localStorage.setItem("momoa_level", level);
+    localStorage.setItem("momoa_exp", exp);
+    updateDisplay();
+  }
 
-  // levelUpAudio.play();
-  // launchLevelUpFireworks();
-
-  // ...その他の処理は元のまま...
+  window.onload = () => {
+    updateDisplay();
+  };
 </script>
 
 </body>
