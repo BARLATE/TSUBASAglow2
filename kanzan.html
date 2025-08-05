@@ -109,6 +109,30 @@
       100% { opacity: 0; }
     }
   </style>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript">
+function startQrScanner() {
+  document.getElementById("qr-reader").style.display = "block";
+  const html5QrCode = new Html5Qrcode("qr-reader");
+  html5QrCode.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: 250 },
+    qrCodeMessage => {
+      html5QrCode.stop().then(() => {
+        document.getElementById("qr-reader").style.display = "none";
+        if (qrCodeMessage === "KAEDE-OK") {
+          giveDrink();
+        } else {
+          alert("このQRコードは無効です");
+        }
+      });
+    },
+    errorMessage => {}
+  ).catch(err => {
+    console.error("QRコードスキャンに失敗:", err);
+  });
+}
+
+</script>
 </head>
 <body>
 
