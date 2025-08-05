@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>KANZAN育成RPG</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Rounded+M+PLUS+1c&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background: #0000aa;
+      color: #fff;
+      font-family: 'Rounded M PLUS 1c', sans-serif;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .menu {
+      background: #fff;
+      color: #0000aa;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      font-weight: bold;
+    }
+    .menu a {
+      text-decoration: none;
+      color: #0000aa;
+      padding: 6px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.8);
+    }
+    .top-section {
+      padding: 20px 10px;
+      text-align: center;
+    }
+    .title {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .character-img {
+      width: 80vw;
+      max-width: 300px;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 0 12px #fff;
+      transition: transform 0.5s ease;
+    }
+    .message {
+      margin-top: 10px;
+      font-size: 20px;
+    }
+    .level-info, .status {
+      margin-top: 8px;
+      font-size: 18px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 16px 24px;
+      font-size: 20px;
+      font-weight: bold;
+      background-color: #fff;
+      color: #0000aa;
+      border: none;
+      border-radius: 30px;
+      width: 90%;
+      max-width: 360px;
+    }
+    .exp-bar {
+      width: 90%;
+      max-width: 360px;
+      height: 20px;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 10px auto;
+    }
+    .exp-fill {
+      height: 100%;
+      background: #0000aa;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    @keyframes levelUpEffect {
+      0% { transform: scale(1); opacity: 1; filter: brightness(1); }
+      30% { transform: scale(1.1); filter: brightness(1.5); }
+      50% { transform: scale(1.2); opacity: 0.8; filter: brightness(2); }
+      100% { transform: scale(1); opacity: 1; filter: brightness(1); }
+    }
+    .level-up-animation {
+      animation: levelUpEffect 1s ease-in-out;
+    }
+
+    .effect-flash {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: white;
+      opacity: 0;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    .flash-on {
+      animation: flashAnim 0.3s ease-out;
+    }
+    @keyframes flashAnim {
+      0% { opacity: 0.8; }
+      100% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<audio id="tapSound" src="tap.mp3" preload="auto"></audio>
+<audio id="levelUpSound" src="levelup.mp3" preload="auto"></audio>
+
+<div class="effect-flash" id="flashEffect"></div>
+<div id="qr-reader" style="width: 300px; margin: auto; display: none;"></div>
+
+<div class="menu">
+  <a href="index.html">TSUBASA</a>
+  <a href="kaede.html">KAEDE</a>
+  <a href="momoa.html">MOMOA</a>
+  <a href="kanzan.html">KANZAN</a>
+</div>
+
+<div class="top-section">
+  <div class="title">KANZANの育成中！</div>
+  <img src="kanzan_lv1.png" alt="KANZAN" class="character-img" id="charImage">
+  <div class="message" id="message">「悩みは、飲んでから聞こうか」</div>
+  <div class="level-info" id="levelInfo">レベル: 1（経験値: 0/20）</div>
+  <div class="status" id="status">攻撃力: 500 / 防御力: 500</div>
+  <div class="exp-bar"><div class="exp-fill" id="expFill"></div></div>
+  <div id="levelUpMessage" style="display:none; font-weight:bold; font-size:20px; margin-top:10px;"></div>
+  <div id="rewardMessage" style="display:none; font-size:18px;"></div>
+  <div id="skillBox" onclick="showSkillDetail()" style="display:none; margin-top:12px; padding:10px 18px; background:#fff; color:#0000aa; font-weight:bold; border-radius:12px; width:fit-content; margin:auto; cursor:pointer; box-shadow: 0 0 6px #66aaff, 0 0 12px #0000aa, 0 0 18px #0033cc;"></div>
+  <div id="skillDetailMessage" style="display:none; margin-top:10px; font-size:16px; text-align:center; background: rgba(255,255,255,0.9); color: #333; padding: 8px 12px; border-radius: 10px; width: fit-content; margin:auto;"></div>
+  <button onclick="startQrScanner()">お酒をあげる</button>
+  <button onclick="resetProgress()">リセットする</button>
+</div>
+
+<script>
+let level = parseInt(localStorage.getItem("kanzan_level")) || 1;
+let exp = parseInt(localStorage.getItem("kanzan_exp")) || 0;
+const maxExp = 10;
+
+const levelInfo = document.getElementById("levelInfo");
+const image = document.getElementById("charImage");
+const message = document.getElementById("message");
+const status = document.getElementById("status");
+const tapAudio = document.getElementById("tapSound");
+const levelUpAudio = document.getElementById("levelUpSound");
+
+const images = [
+  "kanzan_lv1.png","kanzan_lv2.png","kanzan_lv3.png","kanzan_lv4.png","kanzan_lv5.png",
+  "kanzan_lv6.png","kanzan_lv7.png","kanzan_lv8.png","kanzan_lv9.png","kanzan_lv10.png"
+];
+const messages = [
+  "悩みは、飲んでから聞こうか","おれが話、聞くよ","気づいたら朝だったな","もう少しだけ...","まだ話足りない？","この店で一番飲めるのは、俺かも","相談、何回目？笑","とことん付き合うよ","ずっとここにいればいい","KANZAN伝説、開幕。"
+];
+
+function updateDisplay() {
+  image.src = images[level - 1];
+  message.textContent = "「" + messages[level - 1] + "」";
+  levelInfo.textContent = `レベル: ${level}（経験値: ${exp}/${maxExp}）`;
+  status.textContent = `攻撃力: ${level * 500} / 防御力: ${level * 500}`;
+}
+
+function flashEffect() {
+  const flash = document.getElementById("flashEffect");
+  flash.classList.add("flash-on");
+  setTimeout(() => {
+    flash.classList.remove("flash-on");
+  }, 300);
+}
+
+function levelUpAnimation(newLevel) {
+  image.classList.remove("level-up-animation");
+  void image.offsetWidth;
+  image.classList.add("level-up-animation");
+  flashEffect();
+  setTimeout(() => {
+    image.src = images[newLevel - 1];
+  }, 500);
+}
+
+function giveDrink() {
+  tapAudio.currentTime = 0;
+  tapAudio.play();
+
+  exp++;
+  if (exp >= maxExp) {
+    exp = 0;
+    if (level < 10) {
+      level++;
+      levelUpAudio.currentTime = 0;
+      levelUpAudio.play();
+      levelUpAnimation(level);
+      showLevelUp(level);
+    }
+  }
+
+  document.getElementById("expFill").style.width = `${(exp / maxExp) * 100}%`;
+  localStorage.setItem("kanzan_level", level);
+  localStorage.setItem("kanzan_exp", exp);
+  updateDisplay();
+}
+
+function resetProgress() {
+  if (confirm("本当にリセットしますか？")) {
+    localStorage.removeItem("kanzan_level");
+    localStorage.removeItem("kanzan_exp");
+    level = 1;
+    exp = 0;
+    updateDisplay();
+    alert("データをリセットしました！");
+  }
+}
+
+function showSkillDetail() {
+  const skillDescriptions = ["","","","","相談マスター（的確すぎて涙）","","","","","ALLステ+1000"];
+  if (level === 5 || level === 10) {
+    const skillText = skillDescriptions[level - 1];
+    const detailBox = document.getElementById("skillDetailMessage");
+    detailBox.innerText = skillText;
+    detailBox.style.display = "block";
+    setTimeout(() => {
+      detailBox.style.display = "none";
+    }, 3000);
+  }
+}
+
+function showLevelUp(newLevel) {
+  const skillNames = ["","","","","相談マスター","","","","","神KANZAN"];
+  const skillMsg = `KANZANは【${skillNames[newLevel - 1]}】を覚えた！`;
+  const rewardMsg = `レベルアップ報酬🎉 チェキor相談延長券GET！`;
+
+  document.getElementById('levelUpMessage').innerText = skillMsg;
+  document.getElementById('rewardMessage').innerText = rewardMsg;
+  document.getElementById('levelUpMessage').style.display = 'block';
+  document.getElementById('rewardMessage').style.display = 'block';
+
+  setTimeout(() => {
+    document.getElementById('levelUpMessage').style.display = 'none';
+    document.getElementById('rewardMessage').style.display = 'none';
+    updateSkillDisplay();
+  }, 10000);
+}
+
+function updateSkillDisplay() {
+  const skillNames = ["","","","","相談マスター","","","","","神KANZAN"];
+  if (level === 5 || level === 10) {
+    const skillText = `スキル：${skillNames[level - 1]}`;
+    const skillBox = document.getElementById('skillBox');
+    skillBox.textContent = skillText;
+    skillBox.style.display = 'block';
+  } else {
+    document.getElementById('skillBox').style.display = 'none';
+  }
+}
+
+window.onload = () => {
+  updateDisplay();
+  updateSkillDisplay();
+  document.getElementById("expFill").style.width = `${(exp / maxExp) * 100}%`;
+};
+
+function startQrScanner() {
+  document.getElementById("qr-reader").style.display = "block";
+  const html5QrCode = new Html5Qrcode("qr-reader");
+  html5QrCode.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: 250 },
+    qrCodeMessage => {
+      html5QrCode.stop().then(() => {
+        document.getElementById("qr-reader").style.display = "none";
+        if (qrCodeMessage === "KANZAN-OK") {
+          giveDrink();
+        } else {
+          alert("このQRコードは無効です");
+        }
+      });
+    },
+    errorMessage => {}
+  ).catch(err => {
+    console.error("QRコードスキャンに失敗:", err);
+  });
+}
+</script>
+
+</body>
+</html>
